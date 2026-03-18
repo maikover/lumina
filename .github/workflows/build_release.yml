@@ -10,9 +10,37 @@ permissions:
   contents: write
 
 jobs:
+  prepare:
+    name: Prepare Version Info
+    runs-on: ubuntu-latest
+    outputs:
+      build_name: ${{ steps.version_info.outputs.build_name }}
+      build_number: ${{ steps.version_info.outputs.build_number }}
+    steps:
+      - name: Parse Version from Tag
+        id: version_info
+        run: |
+          TAG="${{ github.ref_name }}"
+          VERSION="${TAG#v}"
+
+          if [[ "$VERSION" == *-pre.* ]]; then
+            BASE_VER=$(echo $VERSION | cut -d'-' -f1)
+            PRE_NUM=$(echo $VERSION | rev | cut -d'.' -f1 | rev)
+          else
+            BASE_VER=$VERSION
+            PRE_NUM=999
+          fi
+
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$BASE_VER"
+          V_CODE=$(( 10#${MAJOR:-0} * 100000000 + 10#${MINOR:-0} * 1000000 + 10#${PATCH:-0} * 10000 + 10#$PRE_NUM ))
+
+          echo "build_name=$BASE_VER" >> $GITHUB_OUTPUT
+          echo "build_number=$V_CODE" >> $GITHUB_OUTPUT
+
   build-android:
     name: Build Android APKs & AAB
     runs-on: ubuntu-latest
+    needs: prepare
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
@@ -59,7 +87,9 @@ jobs:
 
       - name: Build App Bundle (Store)
         run: |
-          flutter build appbundle --release --dart-define=IS_STORE_VERSION=true
+          flutter build appbundle --release --dart-define=IS_STORE_VERSION=true \
+            --build-name=${{ needs.prepare.outputs.build_name }} \
+            --build-number=${{ needs.prepare.outputs.build_number }}
           
           NEW_NAME="lumina-${{ github.ref_name }}-bundle-release.aab"
           
@@ -68,7 +98,9 @@ jobs:
 
       - name: Build Universal APK
         run: |
-          flutter build apk --release --dart-define=IS_STORE_VERSION=false
+          flutter build apk --release --dart-define=IS_STORE_VERSION=false \
+            --build-name=${{ needs.prepare.outputs.build_name }} \
+            --build-number=${{ needs.prepare.outputs.build_number }}
           
           NEW_NAME="lumina-${{ github.ref_name }}-universal-release.apk"
           
@@ -77,8 +109,10 @@ jobs:
 
       - name: Build Split APKs
         run: |
-          flutter build apk --release --split-per-abi --dart-define=IS_STORE_VERSION=false
-          
+          flutter build apk --release --split-per-abi --dart-define=IS_STORE_VERSION=false \
+            --build-name=${{ needs.prepare.outputs.build_name }} \
+            --build-number=${{ needs.prepare.outputs.build_number }}
+
           cd build/app/outputs/flutter-apk/
           for file in app-*-release.apk; do
             abi=${file#app-}
@@ -99,6 +133,7 @@ jobs:
   build-ios:
     name: Build iOS IPA
     runs-on: macos-latest
+    needs: prepare
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
@@ -127,7 +162,9 @@ jobs:
 
       - name: Build IPA (Unsigned, Store)
         run: |
-          flutter build ios --release --no-codesign --dart-define=IS_STORE_VERSION=true
+          flutter build ios --release --no-codesign --dart-define=IS_STORE_VERSION=true \
+            --build-name=${{ needs.prepare.outputs.build_name }} \
+            --build-number=${{ needs.prepare.outputs.build_number }}
 
           mkdir -p Payload
           mv build/ios/iphoneos/Runner.app Payload/
@@ -140,7 +177,9 @@ jobs:
 
       - name: Build IPA (Unsigned)
         run: |
-          flutter build ios --release --no-codesign --dart-define=IS_STORE_VERSION=false
+          flutter build ios --release --no-codesign --dart-define=IS_STORE_VERSION=false \
+            --build-name=${{ needs.prepare.outputs.build_name }} \
+            --build-number=${{ needs.prepare.outputs.build_number }}
 
           mkdir -p Payload
           mv build/ios/iphoneos/Runner.app Payload/
@@ -179,6 +218,8 @@ jobs:
       - name: Extract Release Notes
         id: extract_notes
         uses: ffurrer2/extract-release-notes@v3
+        with:
+          prerelease: ${{ contains(github.ref_name, 'pre') }}
 
       - name: Release to GitHub
         uses: softprops/action-gh-release@v2
@@ -190,4 +231,4 @@ jobs:
             artifacts/**/*.ipa
           body: ${{ steps.extract_notes.outputs.release_notes }}
           generate_release_notes: false
-          prerelease: false
+          prerelease: ${{ contains(github.ref_name, 'pre') }}
