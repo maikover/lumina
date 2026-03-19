@@ -1,8 +1,8 @@
-import { Direction, FrameSlot, InitConfig, ThemeUpdate } from "../common/types";
+import { Direction, FrameSlot, ReaderConfig, ReaderTheme } from "../common/types";
 
 /// The interface exposed on `window.api`
 export interface LuminaApi {
-  init(config: InitConfig): void;
+  init(config: ReaderConfig): void;
 
   /// Loads the given URL into the specified frame slot
   /// `token`: A unique identifier for an event, when this event is finished, `onEventFinished(token)` will be called
@@ -26,7 +26,7 @@ export interface LuminaApi {
   cycleFrames(token: number, direction: Direction): void;
 
   /// Updates the theme and layout settings for the current frame
-  updateTheme(token: number, viewWidth: number, viewHeight: number, newTheme: ThemeUpdate): void;
+  updateTheme(token: number, viewWidth: number, viewHeight: number, newTheme: ReaderTheme): void;
 
   /// Checks whether there is an interactive element (image, etc.) at (x, y).
   /// If there is nothing, `onTap` will be called

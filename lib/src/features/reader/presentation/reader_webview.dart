@@ -95,7 +95,7 @@ final InAppWebViewSettings defaultSettings = InAppWebViewSettings(
   useShouldOverrideUrlLoading: true,
   javaScriptEnabled: true,
   disableHorizontalScroll: true,
-  disableVerticalScroll: true,
+  disableVerticalScroll: false,
   supportZoom: false,
   useHybridComposition: false,
   resourceCustomSchemes: [EpubWebViewHandler.virtualScheme],

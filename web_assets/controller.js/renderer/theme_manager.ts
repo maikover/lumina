@@ -1,4 +1,4 @@
-import { colorToHex, type ReaderState, type ThemeUpdate } from '../common/types';
+import { colorToHex, ReaderTheme, type ReaderState } from '../common/types';
 import { FrameManager } from './frame_manager';
 
 export class ThemeManager {
@@ -7,11 +7,10 @@ export class ThemeManager {
     private frameMgr: FrameManager
   ) { }
 
-  updateThemeState(viewWidth: number, viewHeight: number, newTheme: ThemeUpdate): void {
+  updateThemeState(viewWidth: number, viewHeight: number, newTheme: ReaderTheme): void {
     this.state.config.safeWidth = Math.floor(viewWidth);
     this.state.config.safeHeight = Math.floor(viewHeight);
-    this.state.config.padding = newTheme.padding;
-    this.state.config.theme = newTheme.theme;
+    this.state.config.theme = newTheme;
   }
 
   haveBackground(iframe: HTMLIFrameElement): boolean {
@@ -54,8 +53,8 @@ export class ThemeManager {
       + `--lumina-zoom: ${t.zoom};`
       + `--lumina-safe-width: ${cfg.safeWidth}px;`
       + `--lumina-safe-height: ${cfg.safeHeight}px;`
-      + `--lumina-padding-top: ${cfg.padding.top}px;`
-      + `--lumina-padding-left: ${cfg.padding.left}px;`
+      + `--lumina-padding-top: ${cfg.theme.padding.top}px;`
+      + `--lumina-padding-left: ${cfg.theme.padding.left}px;`
       + `--lumina-reader-overflow-x: ${isV ? 'hidden' : 'auto'};`
       + `--lumina-reader-overflow-y: ${isV ? 'auto' : 'hidden'};`
       + `--lumina-surface-color: ${colorToHex(t.surfaceColor)};`
@@ -92,8 +91,8 @@ export class ThemeManager {
     root.style.setProperty('--lumina-zoom', String(t.zoom));
     root.style.setProperty('--lumina-safe-width', cfg.safeWidth + 'px');
     root.style.setProperty('--lumina-safe-height', cfg.safeHeight + 'px');
-    root.style.setProperty('--lumina-padding-top', cfg.padding.top + 'px');
-    root.style.setProperty('--lumina-padding-left', cfg.padding.left + 'px');
+    root.style.setProperty('--lumina-padding-top', cfg.theme.padding.top + 'px');
+    root.style.setProperty('--lumina-padding-left', cfg.theme.padding.left + 'px');
     root.style.setProperty('--lumina-reader-overflow-x', isV ? 'hidden' : 'auto');
     root.style.setProperty('--lumina-reader-overflow-y', isV ? 'auto' : 'hidden');
     root.style.setProperty('--lumina-surface-color', colorToHex(t.surfaceColor));

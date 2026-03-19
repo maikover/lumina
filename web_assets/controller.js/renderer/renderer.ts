@@ -1,11 +1,11 @@
 import {
   type FrameSlot,
   type ReaderState,
-  type ThemeUpdate,
   type Direction,
   WhiteColor,
   BlackColor,
-  ReaderConfig
+  ReaderConfig,
+  ReaderTheme
 } from '../common/types';
 import { LuminaApi } from '../api/lumina_api';
 import { FlutterBridge } from '../api/flutter_bridge';
@@ -40,8 +40,8 @@ export class Renderer implements LuminaApi {
         safeWidth: 0,
         safeHeight: 0,
         direction: 0,
-        padding: { top: 0, left: 0 },
         theme: {
+          padding: { top: 0, left: 0 },
           zoom: 1.0,
           surfaceColor: WhiteColor,
           onSurfaceColor: BlackColor,
@@ -54,6 +54,7 @@ export class Renderer implements LuminaApi {
           surfaceContainerHighColor: BlackColor,
           fontFileName: null,
           overrideFontFamily: false,
+          scroll: false,
         },
         paginationCss: '',
       },
@@ -196,7 +197,7 @@ export class Renderer implements LuminaApi {
     this.interactionMgr.checkLongPressElementAt(x, y);
   }
 
-  updateTheme(token: number, viewWidth: number, viewHeight: number, newTheme: ThemeUpdate): void {
+  updateTheme(token: number, viewWidth: number, viewHeight: number, newTheme: ReaderTheme): void {
     this.themeMgr.updateThemeState(viewWidth, viewHeight, newTheme);
     this.themeMgr.updateCSSVariables(document, 'skeleton-variable-style');
 

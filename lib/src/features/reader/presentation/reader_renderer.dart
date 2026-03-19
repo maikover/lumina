@@ -366,7 +366,7 @@ class _ReaderRendererState extends ConsumerState<ReaderRenderer>
 
     return Positioned.fill(
       child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
+        behavior: HitTestBehavior.translucent,
         onTapUp: widget.shouldShowWebView ? _handleTap : null,
         onHorizontalDragEnd: widget.shouldShowWebView
             ? _handleHorizontalDragEnd

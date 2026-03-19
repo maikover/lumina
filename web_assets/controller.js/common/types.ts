@@ -90,6 +90,7 @@ export function parseColorString(colorStr: string): Color | null {
 }
 
 export interface ReaderTheme {
+  padding: ReaderPadding;
   zoom: number;
   surfaceColor: Color;
   onSurfaceColor: Color;
@@ -102,13 +103,13 @@ export interface ReaderTheme {
   surfaceContainerHighColor: Color;
   overrideFontFamily?: boolean;
   fontFileName?: string | null;
+  scroll: boolean;
 }
 
 export interface ReaderConfig {
   safeWidth: number;
   safeHeight: number;
   direction: number;
-  padding: ReaderPadding;
   theme: ReaderTheme;
 
   paginationCss: string;
@@ -128,13 +129,6 @@ export interface ReaderState {
   properties: Record<FrameSlot, string[]>;
   quadTree: QuadTree<InteractionItem> | null;
   config: ReaderConfig;
-}
-
-// ─── Method Params ───────────────────────────────────────────────────
-
-export interface ThemeUpdate {
-  padding: ReaderPadding;
-  theme: ReaderTheme;
 }
 
 // ─── Internal Helpers ────────────────────────────────────────────────

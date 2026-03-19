@@ -116,6 +116,7 @@ class ReaderSettings {
       ),
       fontFileName: fontFileName,
       overrideFontFamily: overrideFontFamily,
+      scroll: pageAnimation == ReaderPageAnimation.scroll,
     );
   }
 

@@ -246,8 +246,8 @@ export class InteractionManager {
 
       const config = getTypConfig(iframe);
       if (config.havePadding()) {
-        absoluteLeft += this.state.config.padding.left;
-        absoluteTop += this.state.config.padding.top;
+        absoluteLeft += this.state.config.theme.padding.left;
+        absoluteTop += this.state.config.theme.padding.top;
       }
 
       const baseUrl = iframe.contentDocument.baseURI || '';
@@ -291,8 +291,8 @@ export class InteractionManager {
             let docY = rect.top - bodyRect.top;
 
             if (config.havePadding()) {
-              docX += this.state.config.padding.left;
-              docY += this.state.config.padding.top;
+              docX += this.state.config.theme.padding.left;
+              docY += this.state.config.theme.padding.top;
             }
 
             FlutterBridge.onImageLongPress(src, docX, docY, rect.width, rect.height);
@@ -370,8 +370,8 @@ export class InteractionManager {
     let docY = y + body.scrollTop;
 
     if (config.havePadding()) {
-      docX -= this.state.config.padding.left;
-      docY -= this.state.config.padding.top;
+      docX -= this.state.config.theme.padding.left;
+      docY -= this.state.config.theme.padding.top;
     }
 
     const radius = 20;

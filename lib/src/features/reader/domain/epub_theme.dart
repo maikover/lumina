@@ -9,11 +9,12 @@ class EpubTheme {
   final Color? overridePrimaryColor;
   final EdgeInsets padding;
 
-  /// File name (with extension) of the custom font, or null for epub default.
+  // File name (with extension) of the custom font, or null for epub default.
   final String? fontFileName;
-
-  /// When true, force the custom font on top of the epub's own font rules.
   final bool overrideFontFamily;
+
+  // When true, the reader uses a scroll-based navigation model instead of paged.
+  final bool scroll;
 
   EpubTheme({
     required this.zoom,
@@ -23,6 +24,7 @@ class EpubTheme {
     required this.padding,
     this.fontFileName,
     this.overrideFontFamily = false,
+    this.scroll = false,
   });
 
   bool get isDark => colorScheme.brightness == Brightness.dark;
@@ -39,6 +41,7 @@ class EpubTheme {
     EdgeInsets? padding,
     Object? fontFileName = _kUnset,
     bool? overrideFontFamily,
+    bool? scroll,
   }) {
     return EpubTheme(
       zoom: zoom ?? this.zoom,
@@ -51,6 +54,7 @@ class EpubTheme {
           ? this.fontFileName
           : fontFileName as String?,
       overrideFontFamily: overrideFontFamily ?? this.overrideFontFamily,
+      scroll: scroll ?? this.scroll,
     );
   }
 
@@ -59,31 +63,29 @@ class EpubTheme {
   Map<String, dynamic> toThemeMap() {
     return {
       'padding': {'top': padding.top, 'left': padding.left},
-      'theme': {
-        'zoom': zoom,
-        'shouldOverrideTextColor': shouldOverrideTextColor,
 
-        'primaryColor': overridePrimaryColor != null
-            ? colorToMap(overridePrimaryColor!)
-            : colorToMap(colorScheme.primary),
-        'onPrimaryColor': colorToMap(colorScheme.onPrimary),
-        'secondaryColor': colorToMap(colorScheme.secondary),
-        'onSecondaryColor': colorToMap(colorScheme.onSecondary),
-        'errorColor': colorToMap(colorScheme.error),
-        'onErrorColor': colorToMap(colorScheme.onError),
-        'surfaceColor': colorToMap(colorScheme.surface),
-        'onSurfaceColor': colorToMap(colorScheme.onSurface),
-        'primaryContainerColor': colorToMap(colorScheme.primaryContainer),
-        'onSurfaceVariantColor': colorToMap(colorScheme.onSurfaceVariant),
-        'outlineVariantColor': colorToMap(colorScheme.outlineVariant),
-        'surfaceContainerColor': colorToMap(colorScheme.surfaceContainer),
-        'surfaceContainerHighColor': colorToMap(
-          colorScheme.surfaceContainerHigh,
-        ),
+      'zoom': zoom,
+      'shouldOverrideTextColor': shouldOverrideTextColor,
 
-        'fontFileName': fontFileName,
-        'overrideFontFamily': overrideFontFamily,
-      },
+      'primaryColor': overridePrimaryColor != null
+          ? colorToMap(overridePrimaryColor!)
+          : colorToMap(colorScheme.primary),
+      'onPrimaryColor': colorToMap(colorScheme.onPrimary),
+      'secondaryColor': colorToMap(colorScheme.secondary),
+      'onSecondaryColor': colorToMap(colorScheme.onSecondary),
+      'errorColor': colorToMap(colorScheme.error),
+      'onErrorColor': colorToMap(colorScheme.onError),
+      'surfaceColor': colorToMap(colorScheme.surface),
+      'onSurfaceColor': colorToMap(colorScheme.onSurface),
+      'primaryContainerColor': colorToMap(colorScheme.primaryContainer),
+      'onSurfaceVariantColor': colorToMap(colorScheme.onSurfaceVariant),
+      'outlineVariantColor': colorToMap(colorScheme.outlineVariant),
+      'surfaceContainerColor': colorToMap(colorScheme.surfaceContainer),
+      'surfaceContainerHighColor': colorToMap(colorScheme.surfaceContainerHigh),
+
+      'fontFileName': fontFileName,
+      'overrideFontFamily': overrideFontFamily,
+      'scroll': scroll,
     };
   }
 
@@ -98,7 +100,8 @@ class EpubTheme {
         other.overridePrimaryColor == overridePrimaryColor &&
         other.padding == padding &&
         other.fontFileName == fontFileName &&
-        other.overrideFontFamily == overrideFontFamily;
+        other.overrideFontFamily == overrideFontFamily &&
+        other.scroll == scroll;
   }
 
   @override
@@ -110,5 +113,6 @@ class EpubTheme {
     padding,
     fontFileName,
     overrideFontFamily,
+    scroll,
   );
 }
