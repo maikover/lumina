@@ -1,7 +1,6 @@
 part of '../reader_screen.dart';
 
 mixin _ImageViewerMixin on ConsumerState<ReaderScreen> {
-  // === Borrowed state (provided by _ReaderScreenState fields) ===
   BookSession get bookSession;
 
   bool get showControls;

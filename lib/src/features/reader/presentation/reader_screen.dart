@@ -32,6 +32,7 @@ part 'mixins/theme_mixin.dart';
 part 'mixins/link_handling_mixin.dart';
 part 'mixins/image_viewer_mixin.dart';
 part 'mixins/footnote_mixin.dart';
+part 'mixins/volume_control_mixin.dart';
 
 /// Reads EPUB directly from compressed file without extraction
 class ReaderScreen extends ConsumerStatefulWidget {
@@ -52,7 +53,8 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
         _ThemeMixin,
         _LinkHandlingMixin,
         _ImageViewerMixin,
-        _FootnoteMixin {
+        _FootnoteMixin,
+        _VolumeControlMixin {
   @override
   late final EpubWebViewHandler webViewHandler;
 
@@ -117,9 +119,16 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
+  // Volume control state (used by _VolumeControlMixin)
+  @override
   StreamSubscription<String>? volumeSubscription;
+
+  @override
   bool tocDrawerOpen = false;
+  @override
   bool styleDrawerOpen = false;
+
+  @override
   AppLifecycleState? lastLifecycleState = AppLifecycleState.resumed;
 
   @override
@@ -163,7 +172,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     removeFootnoteOverlay(animate: false);
     restoreSystemUI();
     volumeSubscription?.cancel();
-    VolumeControlService.disableInterception();
+    disposeVolumeControl();
     WakelockPlus.disable();
     bookSession.dispose();
     super.dispose();
@@ -179,39 +188,6 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
 
     lastLifecycleState = state;
     setupVolumeControl();
-  }
-
-  void setupVolumeControl() {
-    final resume =
-        ref.read(readerSettingsNotifierProvider).volumeKeyTurnsPage &&
-        !tocDrawerOpen &&
-        !styleDrawerOpen &&
-        lastLifecycleState == AppLifecycleState.resumed;
-
-    if (resume) {
-      VolumeControlService.enableInterception();
-      volumeSubscription ??= VolumeControlService.volumeKeyEvents.listen((
-        event,
-      ) {
-        final isVolumeTurnEnabled = ref
-            .read(readerSettingsNotifierProvider)
-            .volumeKeyTurnsPage;
-        if (isVolumeTurnEnabled) {
-          // If footnote overlay is open, volume keys should close it instead of turning page
-          if (footnoteOverlayEntry != null) {
-            removeFootnoteOverlay();
-            return;
-          }
-          if (event == 'up') {
-            rendererController.performPreviousPageTurn();
-          } else if (event == 'down') {
-            rendererController.performNextPageTurn();
-          }
-        }
-      });
-    } else {
-      VolumeControlService.disableInterception();
-    }
   }
 
   void hideBottomNavigationBar() {

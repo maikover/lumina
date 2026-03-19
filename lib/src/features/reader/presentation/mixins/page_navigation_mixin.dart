@@ -1,7 +1,6 @@
 part of '../reader_screen.dart';
 
 mixin _PageNavigationMixin on ConsumerState<ReaderScreen> {
-  // === Borrowed state (provided by _ReaderScreenState fields) ===
   int get currentPageInChapter;
   set currentPageInChapter(int v);
 
