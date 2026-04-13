@@ -4,6 +4,7 @@ import 'package:lumina/src/core/storage/app_storage.dart';
 import '../../features/library/domain/shelf_book.dart';
 import '../../features/library/domain/book_manifest.dart';
 import '../../features/library/domain/shelf_group.dart';
+import '../../features/reader/domain/highlight.dart';
 import 'isar_database.dart';
 
 /// Concrete implementation of IsarDatabase
@@ -22,6 +23,7 @@ class IsarDatabaseImpl implements IsarDatabase {
         ShelfBookSchema, // Lightweight UI entity
         ShelfGroupSchema, // Folder/group entity
         BookManifestSchema, // Heavy reader entity
+        HighlightSchema, // Highlight/annotation entity
       ],
       directory: AppStorage.supportPath,
       inspector: kDebugMode, // Isar Inspector for debug builds only

@@ -60,6 +60,21 @@ class ReaderWebViewController {
     }
   }
 
+  /// Gets the currently selected text in the webview
+  Future<String> getSelectedText() async {
+    final ctrl = _webViewState?._controller;
+    if (ctrl == null) return '';
+    try {
+      final result = await ctrl.evaluateJavascript(
+        source: "window.getSelection().toString()",
+      );
+      return result?.toString() ?? '';
+    } catch (e) {
+      debugPrint('getSelectedText error: $e');
+      return '';
+    }
+  }
+
   // JavaScript wrapper methods
   Future<int?> jumpToLastPageOfFrame(String frame) async {
     return await _webViewState?._jumpToLastPageOfFrame(frame);
@@ -147,6 +162,7 @@ class ReaderWebViewCallbacks {
   final Function(int pageIndex) onPageChanged;
   final Function(List<String> anchors) onScrollAnchors;
   final Function(String imageUrl, Rect rect) onImageLongPress;
+  final Function(String text) onTextSelected;
   final Function(double x, double y) onTap;
   final Function(String innerHtml, Rect rect, String baseUrl) onFootnoteTap;
   final Function(String url) onLinkTap;
@@ -158,6 +174,7 @@ class ReaderWebViewCallbacks {
     required this.onPageChanged,
     required this.onScrollAnchors,
     required this.onImageLongPress,
+    required this.onTextSelected,
     required this.onTap,
     required this.onFootnoteTap,
     required this.onLinkTap,
@@ -495,6 +512,18 @@ class _ReaderWebViewState extends State<ReaderWebView> {
             (args[4] as num).toDouble(),
           );
           widget.callbacks.onImageLongPress(imageUrl, rect);
+        }
+      },
+    );
+
+    controller.addJavaScriptHandler(
+      handlerName: 'onTextSelection',
+      callback: (args) {
+        if (args.isNotEmpty && args[0] is String) {
+          final selectedText = args[0] as String;
+          if (selectedText.isNotEmpty) {
+            widget.callbacks.onTextSelected(selectedText);
+          }
         }
       },
     );

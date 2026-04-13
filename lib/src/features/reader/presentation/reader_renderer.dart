@@ -155,6 +155,10 @@ class ReaderRendererController {
   Future<void> clearMatches() async {
     await webViewController?.clearMatches();
   }
+
+  Future<String> getSelectedText() async {
+    return await webViewController?.getSelectedText() ?? '';
+  }
 }
 
 class ReaderRenderer extends ConsumerStatefulWidget {
@@ -172,6 +176,7 @@ class ReaderRenderer extends ConsumerStatefulWidget {
   final ValueChanged<int> onPageChanged;
   final ValueChanged<List<String>> onScrollAnchors;
   final Function(String imageUrl, Rect rect) onImageLongPress;
+  final Function(String text) onTextSelected;
   final Function(String innerHtml, Rect rect, String baseUrl) onFootnoteTap;
   final Function(String url) onLinkTap;
   final bool Function(String url) shouldHandleLinkTap;
@@ -196,6 +201,7 @@ class ReaderRenderer extends ConsumerStatefulWidget {
     required this.onPageChanged,
     required this.onScrollAnchors,
     required this.onImageLongPress,
+    required this.onTextSelected,
     required this.onFootnoteTap,
     required this.onLinkTap,
     required this.shouldHandleLinkTap,
@@ -506,6 +512,7 @@ class _ReaderRendererState extends ConsumerState<ReaderRenderer>
           onPageChanged: widget.onPageChanged,
           onScrollAnchors: widget.onScrollAnchors,
           onImageLongPress: widget.onImageLongPress,
+          onTextSelected: widget.onTextSelected,
           onTap: _handleTapZone,
           onFootnoteTap: widget.onFootnoteTap,
           onLinkTap: widget.onLinkTap,

@@ -32,6 +32,7 @@ part 'mixins/theme_mixin.dart';
 part 'mixins/link_handling_mixin.dart';
 part 'mixins/image_viewer_mixin.dart';
 part 'mixins/footnote_mixin.dart';
+part 'mixins/text_selection_mixin.dart';
 
 /// Reads EPUB directly from compressed file without extraction
 class ReaderScreen extends ConsumerStatefulWidget {
@@ -52,7 +53,8 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
         _ThemeMixin,
         _LinkHandlingMixin,
         _ImageViewerMixin,
-        _FootnoteMixin {
+        _FootnoteMixin,
+        _TextSelectionMixin {
   @override
   late final EpubWebViewHandler webViewHandler;
 
@@ -69,6 +71,12 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
 
   @override
   bool showControls = false;
+
+  @override
+  bool isTextSelectionVisible = false;
+
+  @override
+  String? selectedText;
 
   // WebView visibility control for smoother transitions
   Animation<double>? routeAnimation;
@@ -407,6 +415,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                       },
                       onScrollAnchors: handleScrollAnchors,
                       onImageLongPress: handleImageLongPress,
+                      onTextSelected: handleTextSelected,
                       onFootnoteTap: handleFootnoteTap,
                       onLinkTap: handleLinkTap,
                       shouldHandleLinkTap: shouldHandleLinkTap,
