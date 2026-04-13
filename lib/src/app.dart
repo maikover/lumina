@@ -9,8 +9,8 @@ import '../l10n/app_localizations.dart';
 import 'core/router/app_router.dart';
 
 /// Root application widget
-class LuminaReaderApp extends ConsumerWidget {
-  const LuminaReaderApp({super.key});
+class LectraReaderApp extends ConsumerWidget {
+  const LectraReaderApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,7 +21,7 @@ class LuminaReaderApp extends ConsumerWidget {
     final locale = Locale(systemLocale.split('_')[0]);
 
     return MaterialApp.router(
-      title: 'Lumina',
+      title: 'Lectra',
       debugShowCheckedModeBanner: false,
       scrollBehavior: _NoOverscrollBehavior(),
 

@@ -83,7 +83,7 @@ class ExportBackupService {
         // Android: write directly to the public Downloads folder so the file
         // manager and other apps can access it without extra permissions.
         targetDir = Directory(
-          '/storage/emulated/0/Download/Lumina/$backupName',
+          '/storage/emulated/0/Download/Lectra/$backupName',
         );
       } else {
         // iOS: use the system temporary directory.  Files here survive long
@@ -187,7 +187,7 @@ class ExportBackupService {
         // iOS: share the entire folder via the native Share Sheet.
         final shareParams = ShareParams(
           files: [XFile(targetDir.path)],
-          title: 'Lumina Backup',
+          title: 'Lectra Backup',
         );
         final result = await SharePlus.instance.share(shareParams);
         debugPrint('[ExportBackup] iOS share result: $result');

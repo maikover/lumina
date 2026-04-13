@@ -338,7 +338,7 @@ class _BookDetailViewBodyState extends ConsumerState<BookDetailViewBody> {
 (No annotations yet)
 
 ---
-*Exported from Lumina Reader*
+|---\n*Exported from Lectra Reader*\n''';
 ''';
   }
 
@@ -354,7 +354,7 @@ Notes:
 (No annotations yet)
 
 ---
-Exported from Lumina Reader
+Exported from Lectra Reader
 ''';
   }
 }

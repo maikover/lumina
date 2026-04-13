@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 const ColorScheme kLightColorScheme = ColorScheme.light(
-  primary: Color(0xFF2F3437),
+  primary: Color(0xFF6C63FF),    // Violet - new branding
   onPrimary: Colors.white,
-  secondary: Color(0xFFF1F1EF),
-  onSecondary: Color(0xFF2F3437),
+  secondary: Color(0xFF00D9FF),  // Cyan - new branding
+  onSecondary: Color(0xFF1a1a2e),
   tertiary: Color(0xFF5A7A8C),
   onTertiary: Colors.white,
   error: Color(0xFFEB5757),
@@ -35,10 +35,10 @@ const ColorScheme kLightColorScheme = ColorScheme.light(
 );
 
 const ColorScheme kDarkColorScheme = ColorScheme.dark(
-  primary: Color(0xFFEBEBEA),
-  onPrimary: Color(0xFF191919),
-  secondary: Color(0xFF2F2F2F),
-  onSecondary: Color(0xFFEBEBEA),
+  primary: Color(0xFF9D95FF),    // Lighter violet for dark mode
+  onPrimary: Color(0xFF1a1a2e),
+  secondary: Color(0xFF00D9FF),  // Cyan
+  onSecondary: Color(0xFF1a1a2e),
   tertiary: Color(0xFF89A3B2),
   onTertiary: Color(0xFF0D1D26),
   error: Color(0xFFFF7369),
@@ -63,7 +63,7 @@ const ColorScheme kDarkColorScheme = ColorScheme.dark(
   outlineVariant: Color(0xFF2A2A2A),
   inverseSurface: Color(0xFFEBEBEA),
   onInverseSurface: Color(0xFF191919),
-  inversePrimary: Color(0xFF2F3437),
+  inversePrimary: Color(0xFF6C63FF),
   scrim: Colors.black,
   shadow: Colors.black,
 );
