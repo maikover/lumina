@@ -32,6 +32,12 @@ class ReaderSettings {
   /// When true, volume up/down keys turn pages in the reader.
   final bool volumeKeyTurnsPage;
 
+  /// Line height multiplier (1.0 to 2.5). Default is 1.5.
+  final double lineHeight;
+
+  /// Paragraph spacing multiplier (0.5 to 2.0). Default is 1.0.
+  final double paragraphSpacing;
+
   const ReaderSettings({
     this.zoom = 1.0,
     this.followAppTheme = true,
@@ -46,6 +52,8 @@ class ReaderSettings {
     this.fontFileName,
     this.overrideFontFamily = false,
     this.volumeKeyTurnsPage = false,
+    this.lineHeight = 1.5,
+    this.paragraphSpacing = 1.0,
   });
 
   // Sentinel: lets copyWith(fontFileName: null) mean "set to null" rather than
@@ -66,6 +74,8 @@ class ReaderSettings {
     Object? fontFileName = _kUnset,
     bool? overrideFontFamily,
     bool? volumeKeyTurnsPage,
+    double? lineHeight,
+    double? paragraphSpacing,
   }) {
     return ReaderSettings(
       zoom: zoom ?? this.zoom,
@@ -83,6 +93,8 @@ class ReaderSettings {
           : fontFileName as String?,
       overrideFontFamily: overrideFontFamily ?? this.overrideFontFamily,
       volumeKeyTurnsPage: volumeKeyTurnsPage ?? this.volumeKeyTurnsPage,
+      lineHeight: lineHeight ?? this.lineHeight,
+      paragraphSpacing: paragraphSpacing ?? this.paragraphSpacing,
     );
   }
 
@@ -116,6 +128,8 @@ class ReaderSettings {
       ),
       fontFileName: fontFileName,
       overrideFontFamily: overrideFontFamily,
+      lineHeight: lineHeight,
+      paragraphSpacing: paragraphSpacing,
     );
   }
 

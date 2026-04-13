@@ -22,6 +22,8 @@ class ReaderSettingsNotifier extends _$ReaderSettingsNotifier {
   static const _kFontFileName = 'reader_font_file_name';
   static const _kOverrideFontFamily = 'reader_override_font_family';
   static const _kVolumeKeyTurnsPage = 'reader_volume_key_turns_page';
+  static const _kLineHeight = 'reader_line_height';
+  static const _kParagraphSpacing = 'reader_paragraph_spacing';
 
   // ── Build ────────────────────────────────────────────────────────────────────
   @override
@@ -63,6 +65,8 @@ class ReaderSettingsNotifier extends _$ReaderSettingsNotifier {
       fontFileName: fontFileName,
       overrideFontFamily: overrideFontFamily,
       volumeKeyTurnsPage: prefs.getBool(_kVolumeKeyTurnsPage),
+      lineHeight: prefs.getDouble(_kLineHeight),
+      paragraphSpacing: prefs.getDouble(_kParagraphSpacing),
     );
   }
 
@@ -142,5 +146,15 @@ class ReaderSettingsNotifier extends _$ReaderSettingsNotifier {
   Future<void> setVolumeKeyTurnsPage(bool value) async {
     await _prefs.setBool(_kVolumeKeyTurnsPage, value);
     state = state.copyWith(volumeKeyTurnsPage: value);
+  }
+
+  Future<void> setLineHeight(double value) async {
+    await _prefs.setDouble(_kLineHeight, value);
+    state = state.copyWith(lineHeight: value);
+  }
+
+  Future<void> setParagraphSpacing(double value) async {
+    await _prefs.setDouble(_kParagraphSpacing, value);
+    state = state.copyWith(paragraphSpacing: value);
   }
 }

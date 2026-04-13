@@ -1348,5 +1348,163 @@
   "chapterNotFoundInSpine": "Chapter not found in book spine",
   "@chapterNotFoundInSpine": {
     "description": "Error message shown when trying to navigate to a chapter that doesn't exist in the book spine"
+  },
+
+  "readerLineHeight": "Line Height",
+  "@readerLineHeight": {
+    "description": "Label for line height setting in reader"
+  },
+
+  "readerParagraphSpacing": "Paragraph Spacing",
+  "@readerParagraphSpacing": {
+    "description": "Label for paragraph spacing setting in reader"
+  },
+
+  "searchInBook": "Search in Book",
+  "@searchInBook": {
+    "description": "Label for in-book search feature"
+  },
+
+  "searchHint": "Enter search text...",
+  "@searchHint": {
+    "description": "Hint text in search input field"
+  },
+
+  "searchNoResults": "No results found",
+  "@searchNoResults": {
+    "description": "Message shown when search returns no results"
+  },
+
+  "searchResultsCount": "{count} result(s) found",
+  "@searchResultsCount": {
+    "description": "Count of search results",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "searchPrevious": "Previous",
+  "@searchPrevious": {
+    "description": "Button label to go to previous search result"
+  },
+
+  "searchNext": "Next",
+  "@searchNext": {
+    "description": "Button label to go to next search result"
+  },
+
+  "exportAnnotations": "Export Annotations",
+  "@exportAnnotations": {
+    "description": "Button label to export book annotations"
+  },
+
+  "exportAnnotationsTitle": "Export annotations as",
+  "@exportAnnotationsTitle": {
+    "description": "Title for export options dialog"
+  },
+
+  "exportAsTxt": "Text File (.txt)",
+  "@exportAsTxt": {
+    "description": "Option to export as plain text file"
+  },
+
+  "exportAsMd": "Markdown (.md)",
+  "@exportAsMd": {
+    "description": "Option to export as markdown file"
+  },
+
+  "exportAsJson": "JSON (.json)",
+  "@exportAsJson": {
+    "description": "Option to export as JSON file"
+  },
+
+  "exportSuccess": "Annotations exported successfully",
+  "@exportSuccess": {
+    "description": "Success message when annotations are exported"
+  },
+
+  "exportError": "Failed to export annotations",
+  "@exportError": {
+    "description": "Error message when export fails"
+  },
+
+  "brightnessControl": "Brightness",
+  "@brightnessControl": {
+    "description": "Label for brightness control"
+  },
+
+  "librarySearchHint": "Search books...",
+  "@librarySearchHint": {
+    "description": "Hint text for library search bar"
+  },
+
+  "tapZonesConfig": "Tap Zones",
+  "@tapZonesConfig": {
+    "description": "Title for tap zones configuration setting"
+  },
+
+  "tapZoneLeft": "Left Zone",
+  "@tapZoneLeft": {
+    "description": "Label for left tap zone"
+  },
+
+  "tapZoneCenter": "Center Zone",
+  "@tapZoneCenter": {
+    "description": "Label for center tap zone"
+  },
+
+  "tapZoneRight": "Right Zone",
+  "@tapZoneRight": {
+    "description": "Label for right tap zone"
+  },
+
+  "tapZoneActionNextPage": "Next Page",
+  "@tapZoneActionNextPage": {
+    "description": "Action: go to next page"
+  },
+
+  "tapZoneActionPrevPage": "Previous Page",
+  "@tapZoneActionPrevPage": {
+    "description": "Action: go to previous page"
+  },
+
+  "tapZoneActionShowUi": "Show/Hide UI",
+  "@tapZoneActionShowUi": {
+    "description": "Action: toggle controls visibility"
+  },
+
+  "tapZoneActionOpenMenu": "Open Menu",
+  "@tapZoneActionOpenMenu": {
+    "description": "Action: open TOC drawer"
+  },
+
+  "progressBar": "Progress",
+  "@progressBar": {
+    "description": "Label for reading progress bar"
+  },
+
+  "chapterProgress": "Chapter {current} of {total}",
+  "@chapterProgress": {
+    "description": "Chapter progress indicator",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+
+  "estimatedTimeRemaining": "{time} remaining",
+  "@estimatedTimeRemaining": {
+    "description": "Estimated time to finish reading",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   }
 }

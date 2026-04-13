@@ -15,6 +15,12 @@ class EpubTheme {
   /// When true, force the custom font on top of the epub's own font rules.
   final bool overrideFontFamily;
 
+  /// Line height multiplier (1.0 to 2.5). Default is 1.5.
+  final double lineHeight;
+
+  /// Paragraph spacing multiplier (0.5 to 2.0). Default is 1.0.
+  final double paragraphSpacing;
+
   EpubTheme({
     required this.zoom,
     required this.shouldOverrideTextColor,
@@ -23,6 +29,8 @@ class EpubTheme {
     required this.padding,
     this.fontFileName,
     this.overrideFontFamily = false,
+    this.lineHeight = 1.5,
+    this.paragraphSpacing = 1.0,
   });
 
   bool get isDark => colorScheme.brightness == Brightness.dark;
@@ -39,6 +47,8 @@ class EpubTheme {
     EdgeInsets? padding,
     Object? fontFileName = _kUnset,
     bool? overrideFontFamily,
+    double? lineHeight,
+    double? paragraphSpacing,
   }) {
     return EpubTheme(
       zoom: zoom ?? this.zoom,
@@ -51,6 +61,8 @@ class EpubTheme {
           ? this.fontFileName
           : fontFileName as String?,
       overrideFontFamily: overrideFontFamily ?? this.overrideFontFamily,
+      lineHeight: lineHeight ?? this.lineHeight,
+      paragraphSpacing: paragraphSpacing ?? this.paragraphSpacing,
     );
   }
 
@@ -83,6 +95,8 @@ class EpubTheme {
 
         'fontFileName': fontFileName,
         'overrideFontFamily': overrideFontFamily,
+        'lineHeight': lineHeight,
+        'paragraphSpacing': paragraphSpacing,
       },
     };
   }
@@ -98,7 +112,9 @@ class EpubTheme {
         other.overridePrimaryColor == overridePrimaryColor &&
         other.padding == padding &&
         other.fontFileName == fontFileName &&
-        other.overrideFontFamily == overrideFontFamily;
+        other.overrideFontFamily == overrideFontFamily &&
+        other.lineHeight == lineHeight &&
+        other.paragraphSpacing == paragraphSpacing;
   }
 
   @override
@@ -110,5 +126,7 @@ class EpubTheme {
     padding,
     fontFileName,
     overrideFontFamily,
+    lineHeight,
+    paragraphSpacing,
   );
 }

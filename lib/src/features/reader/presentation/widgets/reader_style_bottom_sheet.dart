@@ -41,10 +41,17 @@ class _ReaderStyleBottomSheetState
   late String? _fontFileName;
   late bool _overrideFontFamily;
   late bool _volumeKeyTurnsPage;
+  late double _lineHeight;
+  late double _paragraphSpacing;
 
   static const int _marginMin = 0;
   static const int _marginMax = 64;
   static const int _marginStep = 2;
+
+  static const double _lineHeightMin = 1.0;
+  static const double _lineHeightMax = 2.5;
+  static const double _paragraphSpacingMin = 0.5;
+  static const double _paragraphSpacingMax = 2.0;
 
   @override
   void initState() {
@@ -63,6 +70,8 @@ class _ReaderStyleBottomSheetState
     _fontFileName = s.fontFileName;
     _overrideFontFamily = s.overrideFontFamily;
     _volumeKeyTurnsPage = s.volumeKeyTurnsPage;
+    _lineHeight = s.lineHeight;
+    _paragraphSpacing = s.paragraphSpacing;
   }
 
   @override
@@ -269,6 +278,72 @@ class _ReaderStyleBottomSheetState
                       ),
                     ),
                   ],
+                ),
+
+                const SizedBox(height: 24),
+
+                // ── Section 2b: Line & Paragraph Spacing ──────────────────────────
+                SettingsSectionTitle(label: l10n.readerTypographyLayout),
+                const SizedBox(height: 16),
+
+                // Line Height
+                Row(
+                  children: [
+                    SettingsSubLabel(label: l10n.readerLineHeight),
+                    const Spacer(),
+                    Text(
+                      '${_lineHeight.toStringAsFixed(1)}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Slider(
+                  value: _lineHeight,
+                  min: _lineHeightMin,
+                  max: _lineHeightMax,
+                  divisions: 15,
+                  onChanged: (v) {
+                    setState(() => _lineHeight = v);
+                    _notifier.setLineHeight(v);
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                // Paragraph Spacing
+                Row(
+                  children: [
+                    SettingsSubLabel(label: l10n.readerParagraphSpacing),
+                    const Spacer(),
+                    Text(
+                      '${_paragraphSpacing.toStringAsFixed(1)}x',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Slider(
+                  value: _paragraphSpacing,
+                  min: _paragraphSpacingMin,
+                  max: _paragraphSpacingMax,
+                  divisions: 15,
+                  onChanged: (v) {
+                    setState(() => _paragraphSpacing = v);
+                    _notifier.setParagraphSpacing(v);
+                  },
                 ),
 
                 const SizedBox(height: 24),

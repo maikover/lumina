@@ -1,27 +1,6 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.build/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# Rust / Cargo
+rust/target/
+rust/Cargo.lock
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -33,18 +12,40 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/app.flx
+ios/Flutter/app.zip
+ios/Flutter/flutter_assets/
+ios/Flutter/flutter_export_environment.sh
+**/ios/Pods/
+**/ios/.symlinks/
+
+# Android
+android/.gradle/
+android/app/build/
+android/build/
+android/captures/
+android/gradle/wrapper/gradle-wrapper.jar
+
 # Symbolication related
 app.*.symbols
 
 # Obfuscation related
 app.*.map.json
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+# macOS
+macos/
+/DerivedData/
 
-/macos
+# Windows
+win/
+.idea/
+
 /.old
 /assets/sample
 
@@ -52,3 +53,7 @@ app.*.map.json
 libisar.dylib
 
 /.cursor
+
+# Secrets
+.env
+*.env

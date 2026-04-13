@@ -1358,5 +1358,163 @@
   "chapterNotFoundInSpine": "未找到该章节",
   "@chapterNotFoundInSpine": {
     "description": "章节未找到错误提示，可能是因为该章节没有正确包含在 EPUB 的 spine 中"
+  },
+
+  "readerLineHeight": "行高",
+  "@readerLineHeight": {
+    "description": "阅读器行高设置标签"
+  },
+
+  "readerParagraphSpacing": "段落间距",
+  "@readerParagraphSpacing": {
+    "description": "阅读器段落间距设置标签"
+  },
+
+  "searchInBook": "搜索本书",
+  "@searchInBook": {
+    "description": "书中搜索功能标签"
+  },
+
+  "searchHint": "输入搜索文本...",
+  "@searchHint": {
+    "description": "搜索输入框的提示文本"
+  },
+
+  "searchNoResults": "未找到结果",
+  "@searchNoResults": {
+    "description": "搜索无结果时显示的消息"
+  },
+
+  "searchResultsCount": "找到 {count} 个结果",
+  "@searchResultsCount": {
+    "description": "搜索结果数量",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "searchPrevious": "上一个",
+  "@searchPrevious": {
+    "description": "跳转到上一个搜索结果的按钮标签"
+  },
+
+  "searchNext": "下一个",
+  "@searchNext": {
+    "description": "跳转到下一个搜索结果的按钮标签"
+  },
+
+  "exportAnnotations": "导出笔记",
+  "@exportAnnotations": {
+    "description": "导出书籍笔记的按钮标签"
+  },
+
+  "exportAnnotationsTitle": "导出笔记为",
+  "@exportAnnotationsTitle": {
+    "description": "导出选项对话框标题"
+  },
+
+  "exportAsTxt": "文本文件 (.txt)",
+  "@exportAsTxt": {
+    "description": "导出为纯文本文件的选项"
+  },
+
+  "exportAsMd": "Markdown (.md)",
+  "@exportAsMd": {
+    "description": "导出为 Markdown 文件的选项"
+  },
+
+  "exportAsJson": "JSON (.json)",
+  "@exportAsJson": {
+    "description": "导出为 JSON 文件的选项"
+  },
+
+  "exportSuccess": "笔记导出成功",
+  "@exportSuccess": {
+    "description": "笔记成功导出时显示的消息"
+  },
+
+  "exportError": "导出笔记失败",
+  "@exportError": {
+    "description": "导出失败时显示的错误消息"
+  },
+
+  "brightnessControl": "亮度",
+  "@brightnessControl": {
+    "description": "亮度控制标签"
+  },
+
+  "librarySearchHint": "搜索书籍...",
+  "@librarySearchHint": {
+    "description": "书架搜索栏的提示文本"
+  },
+
+  "tapZonesConfig": "点击区域",
+  "@tapZonesConfig": {
+    "description": "点击区域配置设置标题"
+  },
+
+  "tapZoneLeft": "左侧区域",
+  "@tapZoneLeft": {
+    "description": "左侧点击区域标签"
+  },
+
+  "tapZoneCenter": "中间区域",
+  "@tapZoneCenter": {
+    "description": "中间点击区域标签"
+  },
+
+  "tapZoneRight": "右侧区域",
+  "@tapZoneRight": {
+    "description": "右侧点击区域标签"
+  },
+
+  "tapZoneActionNextPage": "下一页",
+  "@tapZoneActionNextPage": {
+    "description": "动作：跳到下一页"
+  },
+
+  "tapZoneActionPrevPage": "上一页",
+  "@tapZoneActionPrevPage": {
+    "description": "动作：跳到上一页"
+  },
+
+  "tapZoneActionShowUi": "显示/隐藏界面",
+  "@tapZoneActionShowUi": {
+    "description": "动作：切换控制栏显示"
+  },
+
+  "tapZoneActionOpenMenu": "打开菜单",
+  "@tapZoneActionOpenMenu": {
+    "description": "动作：打开目录抽屉"
+  },
+
+  "progressBar": "进度",
+  "@progressBar": {
+    "description": "阅读进度条标签"
+  },
+
+  "chapterProgress": "第 {current} 章，共 {total} 章",
+  "@chapterProgress": {
+    "description": "章节进度指示器",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+
+  "estimatedTimeRemaining": "剩余 {time}",
+  "@estimatedTimeRemaining": {
+    "description": "预计剩余阅读时间",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   }
 }
