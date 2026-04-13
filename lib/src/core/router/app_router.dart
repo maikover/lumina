@@ -7,6 +7,7 @@ import '../services/toast_service.dart';
 import '../../features/library/presentation/library_screen.dart';
 import '../../features/detail/presentation/book_detail_screen.dart';
 import '../../features/reader/presentation/reader_screen.dart';
+import '../../features/reader/presentation/pdf_reader_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 
 /// App Router Configuration
@@ -57,6 +58,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'reader',
         pageBuilder: (context, state) {
           final fileHash = state.pathParameters['id']!;
+          final isPdf = state.uri.queryParameters['pdf'] == 'true';
+          final initialPage = int.tryParse(state.uri.queryParameters['page'] ?? '1') ?? 1;
+
+          if (isPdf) {
+            // PDF reader - use fileHash to look up file path from book manifest
+            return MaterialPage(
+              key: state.pageKey,
+              child: PdfReaderScreen(
+                filePath: fileHash, // fileHash is actually the file path for PDF
+                title: state.uri.queryParameters['title'] ?? 'PDF Reader',
+                initialPage: initialPage,
+              ),
+            );
+          }
+
           return MaterialPage(
             key: state.pageKey,
             child: ReaderScreen(fileHash: fileHash),

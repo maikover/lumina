@@ -76,6 +76,9 @@ dependencies:
   # HTTP client for dictionary API
   http: ^1.2.2
 
+  # PDF viewer
+  pdfrx: ^1.0.82
+
   # Rust FFI bridge
   flutter_rust_bridge: 2.11.1
   lumina_rust:
