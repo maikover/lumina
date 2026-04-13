@@ -1506,5 +1506,70 @@
         "type": "String"
       }
     }
+  },
+
+  "searchInBook": "Search in Book",
+  "@searchInBook": {
+    "description": "Search within the current book"
+  },
+
+  "searchHint": "Enter search text...",
+  "@searchHint": {
+    "description": "Hint text for search input"
+  },
+
+  "searchResultsCount": "{count} results found",
+  "@searchResultsCount": {
+    "description": "Number of search results",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "searchNoResults": "No results found",
+  "@searchNoResults": {
+    "description": "Message when search has no results"
+  },
+
+  "searchNext": "Next",
+  "@searchNext": {
+    "description": "Next search result button"
+  },
+
+  "searchPrevious": "Previous",
+  "@searchPrevious": {
+    "description": "Previous search result button"
+  },
+
+  "exportAnnotations": "Export Annotations",
+  "@exportAnnotations": {
+    "description": "Export annotations button label"
+  },
+
+  "exportAsTxt": "Export as TXT",
+  "@exportAsTxt": {
+    "description": "Export as plain text format"
+  },
+
+  "exportAsMd": "Export as Markdown",
+  "@exportAsMd": {
+    "description": "Export as Markdown format"
+  },
+
+  "exportAsJson": "Export as JSON",
+  "@exportAsJson": {
+    "description": "Export as JSON format"
+  },
+
+  "exportSuccess": "Annotations exported successfully",
+  "@exportSuccess": {
+    "description": "Success message for annotation export"
+  },
+
+  "exportError": "Failed to export annotations",
+  "@exportError": {
+    "description": "Error message for annotation export"
   }
 }
