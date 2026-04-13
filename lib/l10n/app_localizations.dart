@@ -1495,6 +1495,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chapter not found in book spine'**
   String get chapterNotFoundInSpine;
+
+  /// Label for line height setting in reader
+  ///
+  /// In en, this message translates to:
+  /// **'Line Height'**
+  String get readerLineHeight;
+
+  /// Label for paragraph spacing setting in reader
+  ///
+  /// In en, this message translates to:
+  /// **'Paragraph Spacing'**
+  String get readerParagraphSpacing;
+
+  /// Search within the current book
+  ///
+  /// In en, this message translates to:
+  /// **'Search in Book'**
+  String get searchInBook;
+
+  /// Hint text for search input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter search text...'**
+  String get searchHint;
+
+  /// Message when search has no results
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get searchNoResults;
+
+  /// Number of search results
+  ///
+  /// In en, this message translates to:
+  /// **'{count} results found'**
+  String searchResultsCount(int count);
+
+  /// Previous search result button
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get searchPrevious;
+
+  /// Next search result button
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get searchNext;
+
+  /// Export annotations button label
+  ///
+  /// In en, this message translates to:
+  /// **'Export Annotations'**
+  String get exportAnnotations;
+
+  /// Title for export options dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Export annotations as'**
+  String get exportAnnotationsTitle;
+
+  /// Export as plain text format
+  ///
+  /// In en, this message translates to:
+  /// **'Export as TXT'**
+  String get exportAsTxt;
+
+  /// Export as Markdown format
+  ///
+  /// In en, this message translates to:
+  /// **'Export as Markdown'**
+  String get exportAsMd;
+
+  /// Export as JSON format
+  ///
+  /// In en, this message translates to:
+  /// **'Export as JSON'**
+  String get exportAsJson;
+
+  /// Success message for annotation export
+  ///
+  /// In en, this message translates to:
+  /// **'Annotations exported successfully'**
+  String get exportSuccess;
+
+  /// Error message for annotation export
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to export annotations'**
+  String get exportError;
+
+  /// Label for brightness control
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get brightnessControl;
+
+  /// Hint text for library search bar
+  ///
+  /// In en, this message translates to:
+  /// **'Search books...'**
+  String get librarySearchHint;
+
+  /// Title for tap zones configuration setting
+  ///
+  /// In en, this message translates to:
+  /// **'Tap Zones'**
+  String get tapZonesConfig;
+
+  /// Label for left tap zone
+  ///
+  /// In en, this message translates to:
+  /// **'Left Zone'**
+  String get tapZoneLeft;
+
+  /// Label for center tap zone
+  ///
+  /// In en, this message translates to:
+  /// **'Center Zone'**
+  String get tapZoneCenter;
+
+  /// Label for right tap zone
+  ///
+  /// In en, this message translates to:
+  /// **'Right Zone'**
+  String get tapZoneRight;
+
+  /// Action: go to next page
+  ///
+  /// In en, this message translates to:
+  /// **'Next Page'**
+  String get tapZoneActionNextPage;
+
+  /// Action: go to previous page
+  ///
+  /// In en, this message translates to:
+  /// **'Previous Page'**
+  String get tapZoneActionPrevPage;
+
+  /// Action: toggle controls visibility
+  ///
+  /// In en, this message translates to:
+  /// **'Show/Hide UI'**
+  String get tapZoneActionShowUi;
+
+  /// Action: open TOC drawer
+  ///
+  /// In en, this message translates to:
+  /// **'Open Menu'**
+  String get tapZoneActionOpenMenu;
+
+  /// Label for reading progress bar
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get progressBar;
+
+  /// Chapter progress indicator
+  ///
+  /// In en, this message translates to:
+  /// **'Chapter {current} of {total}'**
+  String chapterProgress(int current, int total);
+
+  /// Estimated time to finish reading
+  ///
+  /// In en, this message translates to:
+  /// **'{time} remaining'**
+  String estimatedTimeRemaining(String time);
 }
 
 class _AppLocalizationsDelegate

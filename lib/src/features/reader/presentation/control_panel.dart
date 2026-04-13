@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lumina/src/core/theme/app_theme.dart';
+import 'package:lumina/src/core/theme/color_schemes.dart';
+import 'package:lumina/src/core/widgets/bauhaus_components.dart';
 import 'package:lumina/src/features/reader/application/reader_settings_notifier.dart';
 import 'package:lumina/src/features/reader/presentation/widgets/reader_search_dialog.dart';
 import 'widgets/reader_style_bottom_sheet.dart';
@@ -105,11 +108,9 @@ class _SearchDialogControllerState extends State<_SearchDialogController> {
           await widget.onSearch('');
           return;
         }
-        // Perform search
         await widget.onSearch(query);
-        // The webview handles the matches - we just show that search was performed
         setState(() {
-          _resultCount = 1; // We can't get the actual count from findAllAsync easily
+          _resultCount = 1;
           _currentIndex = 0;
         });
       },
@@ -132,7 +133,6 @@ class _SearchDialogControllerState extends State<_SearchDialogController> {
       resultCount: _resultCount,
       currentIndex: _currentIndex,
       onClose: () {
-        // Clear matches when closing
         widget.onClose();
       },
     );
@@ -295,7 +295,7 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
       data: themeData,
       child: Stack(
         children: [
-          // Top Bar
+          // Top Bar - Bauhaus style
           AnimatedPositioned(
             duration: const Duration(
               milliseconds: AppTheme.defaultAnimationDurationMs,
@@ -312,44 +312,66 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
               ),
               opacity: widget.showControls ? 1.0 : 0.0,
               child: Container(
-                decoration: BoxDecoration(
-                  color: themeData.colorScheme.surfaceContainer,
+                decoration: const BoxDecoration(
+                  color: BauhausColors.background,
+                  border: Border(
+                    bottom: BorderSide(
+                      color: BauhausColors.border,
+                      width: 4,
+                    ),
+                  ),
                 ),
-                child: AppBar(
-                  backgroundColor: themeData.colorScheme.surfaceContainer,
-                  leading: IconButton(
-                    icon: const Icon(Icons.arrow_back_outlined),
-                    onPressed: widget.onBack,
+                child: SafeArea(
+                  bottom: false,
+                  child: Container(
+                    height: AppTheme.kTopAppBarHeight,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        // Back button - Bauhaus style
+                        _BauhausControlButton(
+                          icon: Icons.arrow_back,
+                          onPressed: widget.onBack,
+                        ),
+                        const SizedBox(width: 8),
+                        // Title
+                        Expanded(
+                          child: Text(
+                            widget.title.toUpperCase(),
+                            style: GoogleFonts.outfit(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1.0,
+                              color: BauhausColors.foreground,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        // Search button
+                        _BauhausControlButton(
+                          icon: Icons.search,
+                          onPressed: () {
+                            _showSearchDialog(context);
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        // TTS button - circular blue
+                        _BauhausControlButton(
+                          icon: Icons.volume_up,
+                          onPressed: widget.onShowTtsControls,
+                          backgroundColor: BauhausColors.primaryBlue,
+                          iconColor: Colors.white,
+                          isCircle: true,
+                        ),
+                      ],
+                    ),
                   ),
-                  title: Text(
-                    widget.title,
-                    style: themeData.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  actions: [
-                    IconButton(
-                      icon: const Icon(Icons.search_outlined),
-                      onPressed: () {
-                        // Show search dialog - handled by parent via callback
-                        _showSearchDialog(context);
-                      },
-                      tooltip: AppLocalizations.of(context)?.searchInBook ?? 'Search in Book',
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.volume_up_outlined),
-                      onPressed: widget.onShowTtsControls,
-                      tooltip: 'Text to Speech',
-                    ),
-                  ],
                 ),
               ),
             ),
           ),
 
-          // Bottom Bar
+          // Bottom Bar - Bauhaus style
           AnimatedPositioned(
             duration: const Duration(
               milliseconds: AppTheme.defaultAnimationDurationMs,
@@ -372,8 +394,14 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
                   top: 16,
                   bottom: bottomStatusBarHeight + 16,
                 ),
-                decoration: BoxDecoration(
-                  color: themeData.colorScheme.surfaceContainer,
+                decoration: const BoxDecoration(
+                  color: BauhausColors.background,
+                  border: Border(
+                    top: BorderSide(
+                      color: BauhausColors.border,
+                      width: 4,
+                    ),
+                  ),
                 ),
                 constraints: BoxConstraints(
                   maxHeight:
@@ -384,14 +412,16 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.list_outlined),
+                    // Menu button
+                    _BauhausControlButton(
+                      icon: Icons.list,
                       onPressed: widget.onOpenDrawer,
-                      color: themeData.colorScheme.onSurface,
                     ),
+                    // Navigation controls
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        // Previous button
                         GestureDetector(
                           onLongPressStart: _shouldHandleOnLongPressLeft
                               ? (_) {
@@ -410,32 +440,37 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
                           onLongPressCancel: () {
                             _longPressTimer?.cancel();
                           },
-                          child: IconButton(
-                            icon: const Icon(Icons.chevron_left_outlined),
+                          child: _BauhausControlButton(
+                            icon: Icons.chevron_left,
                             onPressed: _shouldHandleOnPressLeft
                                 ? _handleTapLeft
                                 : null,
-                            onLongPress: null,
-                            disabledColor: themeData.disabledColor,
-                            color: themeData.colorScheme.onSurface,
                           ),
                         ),
+                        const SizedBox(width: 8),
+                        // Progress indicator with Bauhaus slider
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            // Draggable progress slider
-                            SizedBox(
+                            // Bauhaus progress slider
+                            Container(
                               width: 100,
                               height: 20,
+                              decoration: BoxDecoration(
+                                color: BauhausColors.muted,
+                                border: Border.all(
+                                  color: BauhausColors.border,
+                                  width: 2,
+                                ),
+                              ),
                               child: SliderTheme(
-                                data: SliderThemeData(
-                                  trackHeight: 4,
-                                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
-                                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 12),
-                                  activeTrackColor: themeData.colorScheme.primary,
-                                  inactiveTrackColor: themeData.colorScheme.surfaceContainerHighest,
-                                  thumbColor: themeData.colorScheme.primary,
-                                  overlayColor: themeData.colorScheme.primary.withAlpha(30),
+                                data: const SliderThemeData(
+                                  trackHeight: 12,
+                                  thumbShape: RectSliderThumbShape(),
+                                  overlayShape: SliderComponentShape.noOverlay,
+                                  activeTrackColor: BauhausColors.primaryYellow,
+                                  inactiveTrackColor: BauhausColors.muted,
+                                  thumbColor: BauhausColors.foreground,
                                 ),
                                 child: Slider(
                                   value: widget.totalSpineItems > 1
@@ -445,17 +480,14 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
                                   max: (widget.totalSpineItems - 1).toDouble().clamp(0, double.infinity),
                                   divisions: widget.totalSpineItems > 1 ? (widget.totalSpineItems - 1).clamp(1, 100) : 1,
                                   onChanged: (value) {
-                                    // Navigate to selected chapter
                                     final targetIndex = value.round();
                                     if (targetIndex < widget.currentSpineItemIndex) {
-                                      // Go to previous chapters to reach target
                                       for (int i = widget.currentSpineItemIndex - 1; i >= targetIndex; i--) {
                                         if (i < widget.currentSpineItemIndex) {
                                           widget.onPreviousPage();
                                         }
                                       }
                                     } else if (targetIndex > widget.currentSpineItemIndex) {
-                                      // Go to next chapters to reach target
                                       for (int i = widget.currentSpineItemIndex; i < targetIndex; i++) {
                                         widget.onNextPage();
                                       }
@@ -464,55 +496,39 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
                                 ),
                               ),
                             ),
-                            Stack(
-                              alignment: Alignment.center,
+                            const SizedBox(height: 4),
+                            // Page indicator
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Visibility(
-                                  visible: false,
-                                  maintainSize: true,
-                                  maintainAnimation: true,
-                                  maintainState: true,
-                                  child: Text(
-                                    '0' * (2 * 4 + 1),
-                                    style: themeData.textTheme.bodyMedium
-                                        ?.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          fontFeatures: const [
-                                            FontFeature.tabularFigures(),
-                                          ],
-                                        ),
-                                  ),
+                                const BauhausSquare(
+                                  color: BauhausColors.primaryRed,
+                                  size: 6,
                                 ),
+                                const SizedBox(width: 6),
                                 Text(
                                   _formatPageIndicator(
                                     widget.currentSpineItemIndex + 1,
                                     widget.totalSpineItems,
                                   ),
-                                  style: themeData.textTheme.bodyMedium
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w500,
-                                        fontFeatures: const [
-                                          FontFeature.tabularFigures(),
-                                        ],
-                                      ),
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 1.0,
+                                    color: BauhausColors.foreground,
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                const BauhausSquare(
+                                  color: BauhausColors.primaryBlue,
+                                  size: 6,
                                 ),
                               ],
                             ),
-                            if (widget.totalPagesInChapter > 1)
-                              Text(
-                                _formatPageIndicator(
-                                  widget.currentPageInChapter + 1,
-                                  widget.totalPagesInChapter,
-                                ),
-                                style: themeData.textTheme.bodyMedium?.copyWith(
-                                  fontSize: 10,
-                                  fontFeatures: const [
-                                    FontFeature.tabularFigures(),
-                                  ],
-                                ),
-                              ),
                           ],
                         ),
+                        const SizedBox(width: 8),
+                        // Next button
                         GestureDetector(
                           onLongPressStart: _shouldHandleOnLongPressRight
                               ? (_) {
@@ -531,20 +547,18 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
                           onLongPressCancel: () {
                             _longPressTimer?.cancel();
                           },
-                          child: IconButton(
-                            icon: const Icon(Icons.chevron_right_outlined),
+                          child: _BauhausControlButton(
+                            icon: Icons.chevron_right,
                             onPressed: _shouldHandleOnPressRight
                                 ? _handleTapRight
                                 : null,
-                            onLongPress: null,
-                            disabledColor: themeData.disabledColor,
-                            color: themeData.colorScheme.onSurface,
                           ),
                         ),
                       ],
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.brush_outlined),
+                    // Style button
+                    _BauhausControlButton(
+                      icon: Icons.brush_outlined,
                       onPressed: () async {
                         widget.onToggleStyleDrawer(true);
                         await showModalBottomSheet(
@@ -565,39 +579,33 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
                                 return Theme(
                                   data: activeTheme,
                                   child: Container(
-                                    decoration: BoxDecoration(
-                                      color: activeTheme
-                                          .colorScheme
-                                          .surfaceContainerLow,
-                                      borderRadius: const BorderRadius.vertical(
-                                        top: Radius.circular(28),
+                                    decoration: const BoxDecoration(
+                                      color: BauhausColors.background,
+                                      border: Border(
+                                        top: BorderSide(
+                                          color: BauhausColors.border,
+                                          width: 4,
+                                        ),
                                       ),
                                     ),
                                     constraints: BoxConstraints(
                                       maxHeight:
                                           MediaQuery.sizeOf(context).height *
-                                          0.75,
+                                              0.75,
                                     ),
                                     child: SafeArea(
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Center(
-                                            child: Container(
-                                              margin: const EdgeInsets.only(
-                                                top: 24,
-                                                bottom: 16,
-                                              ),
-                                              height: 4,
-                                              width: 32,
-                                              decoration: BoxDecoration(
-                                                color: activeTheme
-                                                    .colorScheme
-                                                    .onSurfaceVariant,
-                                                borderRadius:
-                                                    BorderRadius.circular(2),
-                                              ),
+                                          // Bauhaus handle
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                              top: 16,
+                                              bottom: 16,
                                             ),
+                                            width: 48,
+                                            height: 8,
+                                            color: BauhausColors.foreground,
                                           ),
                                           const Flexible(
                                             child: ReaderStyleBottomSheet(),
@@ -612,9 +620,7 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
                           },
                           backgroundColor: Colors.transparent,
                           elevation: 0,
-                          barrierColor: themeData.colorScheme.scrim.withAlpha(
-                            isDark ? 150 : 80,
-                          ),
+                          barrierColor: BauhausColors.foreground.withValues(alpha: 0.5),
                           scrollControlDisabledMaxHeightRatio: 0.75,
                           constraints: const BoxConstraints(
                             maxWidth: double.infinity,
@@ -622,7 +628,6 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
                         );
                         widget.onToggleStyleDrawer(false);
                       },
-                      color: themeData.colorScheme.onSurface,
                     ),
                   ],
                 ),
@@ -630,6 +635,85 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Bauhaus-style control button for the reader
+class _BauhausControlButton extends StatefulWidget {
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final Color backgroundColor;
+  final Color iconColor;
+  final bool isCircle;
+
+  const _BauhausControlButton({
+    required this.icon,
+    this.onPressed,
+    this.backgroundColor = Colors.white,
+    this.iconColor = BauhausColors.foreground,
+    this.isCircle = false,
+  });
+
+  @override
+  State<_BauhausControlButton> createState() => _BauhausControlButtonState();
+}
+
+class _BauhausControlButtonState extends State<_BauhausControlButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: widget.onPressed == null
+          ? null
+          : (_) => setState(() => _isPressed = true),
+      onTapUp: widget.onPressed == null
+          ? null
+          : (_) => setState(() => _isPressed = false),
+      onTapCancel: widget.onPressed == null
+          ? null
+          : () => setState(() => _isPressed = false),
+      onTap: widget.onPressed,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        transform: Matrix4.translationValues(
+          _isPressed ? 2.0 : 0.0,
+          _isPressed ? 2.0 : 0.0,
+          0.0,
+        ),
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: widget.onPressed == null
+              ? BauhausColors.muted
+              : widget.backgroundColor,
+          shape: widget.isCircle ? BoxShape.circle : BoxShape.rectangle,
+          border: Border.all(
+            color: BauhausColors.border,
+            width: 2,
+          ),
+          boxShadow: widget.onPressed == null
+              ? []
+              : [
+                  BoxShadow(
+                    offset: _isPressed
+                        ? Offset.zero
+                        : const Offset(2, 2),
+                    blurRadius: 0,
+                    spreadRadius: 0,
+                    color: BauhausColors.border,
+                  ),
+                ],
+        ),
+        child: Icon(
+          widget.icon,
+          size: 20,
+          color: widget.onPressed == null
+              ? BauhausColors.foreground.withValues(alpha: 0.4)
+              : widget.iconColor,
+        ),
       ),
     );
   }

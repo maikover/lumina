@@ -4,7 +4,10 @@ import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lumina/src/core/services/toast_service.dart';
+import 'package:lumina/src/core/theme/color_schemes.dart';
+import 'package:lumina/src/core/widgets/bauhaus_components.dart';
 import 'package:lumina/src/core/url_launcher/url_launcher.dart';
 import 'package:lumina/src/features/settings/presentation/widgets/settings_app_header.dart';
 import 'package:lumina/src/features/settings/presentation/widgets/settings_appearance_section.dart';
@@ -21,7 +24,7 @@ const bool _isStoreVersion = bool.fromEnvironment(
   defaultValue: false,
 );
 
-/// Settings Screen - Shows app information, tips and credits
+/// Settings Screen with Bauhaus design styling
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
@@ -64,108 +67,293 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     return Stack(
       children: [
         Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: BauhausColors.background,
           appBar: AppBar(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            backgroundColor: BauhausColors.background,
+            leading: IconButton(
+              icon: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: BauhausColors.border,
+                    width: 2,
+                  ),
+                  boxShadow: const [
+                    BoxShadow(
+                      offset: Offset(2, 2),
+                      blurRadius: 0,
+                      color: BauhausColors.border,
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: BauhausColors.foreground,
+                  size: 20,
+                ),
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            title: Text(
+              'SETTINGS',
+              style: GoogleFonts.outfit(
+                fontSize: 18,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 2.0,
+                color: BauhausColors.foreground,
+              ),
+            ),
+            bottom: const PreferredSize(
+              preferredSize: Size.fromHeight(4),
+              child: Divider(
+                height: 4,
+                thickness: 4,
+                color: BauhausColors.border,
+              ),
+            ),
           ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(vertical: 32),
             child: Column(
               children: [
+                // Header with geometric shapes
                 SettingsAppHeader(version: _version),
 
                 const SizedBox(height: 48),
 
-                const SettingsAppearanceSection(),
+                // Appearance section - Bauhaus style
+                _BauhausSectionHeader(
+                  title: 'APPEARANCE',
+                  accentColor: BauhausColors.primaryRed,
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: BauhausColors.border,
+                      width: 3,
+                    ),
+                    boxShadow: const [
+                      BoxShadow(
+                        offset: Offset(4, 4),
+                        blurRadius: 0,
+                        color: BauhausColors.border,
+                      ),
+                    ],
+                  ),
+                  child: const SettingsAppearanceSection(),
+                ),
 
                 const SizedBox(height: 24),
 
                 // Library section
-                SettingsInfoSection(
-                  title: l10n.library,
-                  children: const [BackupTile()],
+                _BauhausSectionHeader(
+                  title: l10n.library.toUpperCase(),
+                  accentColor: BauhausColors.primaryBlue,
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: BauhausColors.border,
+                      width: 3,
+                    ),
+                    boxShadow: const [
+                      BoxShadow(
+                        offset: Offset(4, 4),
+                        blurRadius: 0,
+                        color: BauhausColors.border,
+                      ),
+                    ],
+                  ),
+                  child: const BackupTile(),
                 ),
 
                 const SizedBox(height: 24),
 
                 // Storage section
-                SettingsInfoSection(
-                  title: l10n.storage,
-                  children: [
-                    const CleanCacheTile(),
-                    SettingsInfoTile(
-                      icon: Icons.folder_open_outlined,
-                      title: l10n.openStorageLocation,
-                      subtitle: l10n.openStorageLocationSubtitle,
-                      onTap: () => Platform.isAndroid
-                          ? _openAndroidFolder(l10n)
-                          : _openIOSFolder(l10n),
+                _BauhausSectionHeader(
+                  title: l10n.storage.toUpperCase(),
+                  accentColor: BauhausColors.primaryYellow,
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: BauhausColors.border,
+                      width: 3,
                     ),
-                  ],
+                    boxShadow: const [
+                      BoxShadow(
+                        offset: Offset(4, 4),
+                        blurRadius: 0,
+                        color: BauhausColors.border,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      const CleanCacheTile(),
+                      const Divider(height: 24, thickness: 2),
+                      _BauhausSettingsTile(
+                        icon: Icons.folder_open_outlined,
+                        title: l10n.openStorageLocation,
+                        subtitle: l10n.openStorageLocationSubtitle,
+                        onTap: () => Platform.isAndroid
+                            ? _openAndroidFolder(l10n)
+                            : _openIOSFolder(l10n),
+                      ),
+                    ],
+                  ),
                 ),
 
                 const SizedBox(height: 24),
 
-                // Fonts section (inline management)
-                SettingsFontSection(
-                  onChangeSelectingState: (state) {
-                    setState(() {
-                      isSelectingFiles = state;
-                    });
-                  },
+                // Fonts section
+                _BauhausSectionHeader(
+                  title: 'FONTS',
+                  accentColor: BauhausColors.primaryRed,
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: BauhausColors.border,
+                      width: 3,
+                    ),
+                    boxShadow: const [
+                      BoxShadow(
+                        offset: Offset(4, 4),
+                        blurRadius: 0,
+                        color: BauhausColors.border,
+                      ),
+                    ],
+                  ),
+                  child: SettingsFontSection(
+                    onChangeSelectingState: (state) {
+                      setState(() {
+                        isSelectingFiles = state;
+                      });
+                    },
+                  ),
                 ),
 
                 const SizedBox(height: 24),
 
                 // Project info section
-                SettingsInfoSection(
-                  title: l10n.projectInfo,
-                  children: [
-                    SettingsInfoTile(
-                      icon: Icons.code_outlined,
-                      title: l10n.github,
-                      subtitle: 'github.com/MilkFeng/lumina.git',
-                      onTap: () =>
-                          _launchUrl('https://github.com/MilkFeng/lumina.git'),
+                _BauhausSectionHeader(
+                  title: l10n.projectInfo.toUpperCase(),
+                  accentColor: BauhausColors.primaryBlue,
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: BauhausColors.border,
+                      width: 3,
                     ),
-                    SettingsInfoTile(
-                      icon: Icons.person_outline_outlined,
-                      title: l10n.author,
-                      subtitle: 'Milk Feng',
-                    ),
-                    SettingsInfoTile(
-                      icon: Icons.attribution_outlined,
-                      title: l10n.openSourceLicenses,
-                      onTap: () => showLicensePage(
-                        context: context,
-                        applicationVersion: _buildNumber,
-                        useRootNavigator: true,
+                    boxShadow: const [
+                      BoxShadow(
+                        offset: Offset(4, 4),
+                        blurRadius: 0,
+                        color: BauhausColors.border,
                       ),
-                      subtitle: l10n.openSourceLicensesSubtitle,
-                    ),
-                    if (!_isStoreVersion) const CheckUpdateTile(),
-                  ],
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      _BauhausSettingsTile(
+                        icon: Icons.code_outlined,
+                        title: l10n.github,
+                        subtitle: 'github.com/MilkFeng/lumina.git',
+                        onTap: () =>
+                            _launchUrl('https://github.com/MilkFeng/lumina.git'),
+                      ),
+                      const Divider(height: 24, thickness: 2),
+                      _BauhausSettingsTile(
+                        icon: Icons.person_outline_outlined,
+                        title: l10n.author,
+                        subtitle: 'Milk Feng',
+                      ),
+                      const Divider(height: 24, thickness: 2),
+                      _BauhausSettingsTile(
+                        icon: Icons.attribution_outlined,
+                        title: l10n.openSourceLicenses,
+                        subtitle: l10n.openSourceLicensesSubtitle,
+                        onTap: () => showLicensePage(
+                          context: context,
+                          applicationVersion: _buildNumber,
+                          useRootNavigator: true,
+                        ),
+                      ),
+                      if (!_isStoreVersion) ...[
+                        const Divider(height: 24, thickness: 2),
+                        const CheckUpdateTile(),
+                      ],
+                    ],
+                  ),
                 ),
 
                 const SizedBox(height: 24),
 
                 // Tips section
-                SettingsInfoSection(
-                  title: l10n.tips,
-                  children: [
-                    SettingsTipTile(
-                      icon: Icons.touch_app_outlined,
-                      tip: l10n.tipLongPressTab,
+                _BauhausSectionHeader(
+                  title: l10n.tips.toUpperCase(),
+                  accentColor: BauhausColors.primaryYellow,
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: BauhausColors.border,
+                      width: 3,
                     ),
-                    SettingsTipTile(
-                      icon: Icons.keyboard_double_arrow_right_outlined,
-                      tip: l10n.tipLongPressNextTrack,
-                    ),
-                    SettingsTipTile(
-                      icon: Icons.image_outlined,
-                      tip: l10n.longPressToViewImage,
-                    ),
-                  ],
+                    boxShadow: const [
+                      BoxShadow(
+                        offset: Offset(4, 4),
+                        blurRadius: 0,
+                        color: BauhausColors.border,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      _BauhausTipTile(
+                        icon: Icons.touch_app_outlined,
+                        tip: l10n.tipLongPressTab,
+                      ),
+                      const Divider(height: 24, thickness: 2),
+                      _BauhausTipTile(
+                        icon: Icons.keyboard_double_arrow_right_outlined,
+                        tip: l10n.tipLongPressNextTrack,
+                      ),
+                      const Divider(height: 24, thickness: 2),
+                      _BauhausTipTile(
+                        icon: Icons.image_outlined,
+                        tip: l10n.longPressToViewImage,
+                      ),
+                    ],
+                  ),
                 ),
 
                 const SizedBox(height: 128),
@@ -176,11 +364,28 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         if (isSelectingFiles)
           Positioned.fill(
             child: Container(
-              color: Theme.of(context).colorScheme.scrim.withValues(alpha: 0.5),
-              child: const Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.white,
+              color: BauhausColors.foreground.withValues(alpha: 0.5),
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: BauhausColors.border,
+                      width: 4,
+                    ),
+                    boxShadow: const [
+                      BoxShadow(
+                        offset: Offset(8, 8),
+                        blurRadius: 0,
+                        color: BauhausColors.border,
+                      ),
+                    ],
+                  ),
+                  child: const CircularProgressIndicator(
+                    strokeWidth: 3,
+                    color: BauhausColors.primaryRed,
+                  ),
                 ),
               ),
             ),
@@ -224,16 +429,219 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Future<void> _openIOSFolder(AppLocalizations l10n) async {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.openStorageLocation),
-        content: Text(l10n.openStorageLocationIOSMessage),
-        actions: [
-          FilledButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.confirm),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            color: BauhausColors.border,
+            width: 4,
+          ),
+          boxShadow: const [
+            BoxShadow(
+              offset: Offset(8, 8),
+              blurRadius: 0,
+              color: BauhausColors.border,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              l10n.openStorageLocation.toUpperCase(),
+              style: GoogleFonts.outfit(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.0,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.openStorageLocationIOSMessage,
+              style: GoogleFonts.outfit(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            BauhausButton(
+              label: l10n.confirm,
+              onPressed: () => Navigator.pop(context),
+              variant: BauhausButtonVariant.primary,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Bauhaus section header with geometric accent
+class _BauhausSectionHeader extends StatelessWidget {
+  final String title;
+  final Color accentColor;
+
+  const _BauhausSectionHeader({
+    required this.title,
+    required this.accentColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Container(
+            width: 16,
+            height: 16,
+            color: accentColor,
+          ),
+          const SizedBox(width: 12),
+          Text(
+            title,
+            style: GoogleFonts.outfit(
+              fontSize: 14,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 2.0,
+              color: BauhausColors.foreground,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Container(
+              height: 2,
+              color: BauhausColors.border,
+            ),
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Bauhaus-styled settings tile
+class _BauhausSettingsTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final VoidCallback? onTap;
+
+  const _BauhausSettingsTile({
+    required this.icon,
+    required this.title,
+    this.subtitle,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: BauhausColors.border,
+                width: 2,
+              ),
+            ),
+            child: Icon(
+              icon,
+              color: BauhausColors.foreground,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title.toUpperCase(),
+                  style: GoogleFonts.outfit(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.5,
+                    color: BauhausColors.foreground,
+                  ),
+                ),
+                if (subtitle != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle!,
+                    style: GoogleFonts.outfit(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                      color: BauhausColors.foreground.withValues(alpha: 0.6),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          if (onTap != null)
+            const Icon(
+              Icons.chevron_right,
+              color: BauhausColors.foreground,
+              size: 20,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Bauhaus-styled tip tile
+class _BauhausTipTile extends StatelessWidget {
+  final IconData icon;
+  final String tip;
+
+  const _BauhausTipTile({
+    required this.icon,
+    required this.tip,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: BauhausColors.primaryYellow,
+            border: Border.all(
+              color: BauhausColors.border,
+              width: 2,
+            ),
+          ),
+          child: Icon(
+            icon,
+            color: BauhausColors.foreground,
+            size: 16,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            tip,
+            style: GoogleFonts.outfit(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: BauhausColors.foreground,
+              height: 1.5,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

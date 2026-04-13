@@ -2,19 +2,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:lumina/src/core/services/toast_service.dart';
+import 'package:lumina/src/core/theme/color_schemes.dart';
+import 'package:lumina/src/core/widgets/bauhaus_components.dart';
 import 'package:lumina/src/features/detail/presentation/book_detail_screen.dart';
 import '../../../library/domain/shelf_book.dart';
 import '../../../../core/widgets/book_cover.dart';
 import '../../../../core/widgets/expandable_text.dart';
 import '../../../../../l10n/app_localizations.dart';
 
-/// Read-only detail view for a single [ShelfBook].
-///
+/// Read-only detail view for a single [ShelfBook] with Bauhaus styling.
 /// Displays cover, title, authors, description, reading progress, metadata
-/// chips, and a read/continue button. Tapping the cover or the button
-/// navigates to the reader and then invalidates [bookDetailProvider].
+/// chips, and a read/continue button.
 class BookDetailViewBody extends ConsumerStatefulWidget {
   final ShelfBook book;
   final String bookId;
@@ -42,7 +43,6 @@ class _BookDetailViewBodyState extends ConsumerState<BookDetailViewBody> {
            filePath.toLowerCase().endsWith('.pdfrx'));
 
       if (isPdf) {
-        // Open PDF reader
         final encodedTitle = Uri.encodeComponent(widget.book.title);
         context.push(
           '/read/${Uri.encodeComponent(filePath!)}?pdf=true&title=$encodedTitle',
@@ -50,7 +50,6 @@ class _BookDetailViewBodyState extends ConsumerState<BookDetailViewBody> {
           ref.invalidate(bookDetailProvider(widget.bookId));
         });
       } else {
-        // Open EPUB reader
         context.push('/read/${widget.book.fileHash}').then((_) {
           ref.invalidate(bookDetailProvider(widget.bookId));
         });
@@ -63,18 +62,34 @@ class _BookDetailViewBodyState extends ConsumerState<BookDetailViewBody> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Cover with Hero animation — tapping opens the reader.
+            // Cover with geometric frame - Bauhaus style
             Align(
               alignment: Alignment.centerLeft,
               child: Hero(
                 tag: 'book-cover-${widget.book.id}',
                 child: GestureDetector(
                   onTap: navigateToReader,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxHeight: 300),
-                    child: BookCover(
-                      relativePath: widget.book.coverPath,
-                      radius: BorderRadius.circular(8),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: BauhausColors.border,
+                        width: 4,
+                      ),
+                      boxShadow: const [
+                        BoxShadow(
+                          offset: Offset(6, 6),
+                          blurRadius: 0,
+                          spreadRadius: 0,
+                          color: BauhausColors.border,
+                        ),
+                      ],
+                    ),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxHeight: 300),
+                      child: BookCover(
+                        relativePath: widget.book.coverPath,
+                        radius: BorderRadius.zero,
+                      ),
                     ),
                   ),
                 ),
@@ -83,12 +98,15 @@ class _BookDetailViewBodyState extends ConsumerState<BookDetailViewBody> {
 
             const SizedBox(height: 32),
 
-            // Title
+            // Title - Bauhaus style
             Text(
-              widget.book.title,
-              style: Theme.of(
-                context,
-              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w400),
+              widget.book.title.toUpperCase(),
+              style: GoogleFonts.outfit(
+                fontSize: 28,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 0.5,
+                color: BauhausColors.foreground,
+              ),
               textAlign: TextAlign.left,
             ),
 
@@ -97,9 +115,10 @@ class _BookDetailViewBodyState extends ConsumerState<BookDetailViewBody> {
               const SizedBox(height: 12),
               Text(
                 widget.book.authors.join(l10n.spliter),
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w400,
+                style: GoogleFonts.outfit(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: BauhausColors.foreground.withValues(alpha: 0.7),
                 ),
                 textAlign: TextAlign.left,
               ),
@@ -111,39 +130,51 @@ class _BookDetailViewBodyState extends ConsumerState<BookDetailViewBody> {
               ExpandableText(
                 text: _extract(widget.book.description),
                 maxLines: 4,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400),
+                style: GoogleFonts.outfit(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: BauhausColors.foreground,
+                  height: 1.6,
+                ),
               ),
             ],
 
             const SizedBox(height: 32),
 
-            // Reading progress badge
+            // Reading progress - Bauhaus card style
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
+                color: Colors.white,
                 border: Border.all(
-                  color: Theme.of(context).colorScheme.outline,
-                  width: 1,
+                  color: BauhausColors.border,
+                  width: 2,
                 ),
-                borderRadius: BorderRadius.circular(6),
+                boxShadow: const [
+                  BoxShadow(
+                    offset: Offset(4, 4),
+                    blurRadius: 0,
+                    color: BauhausColors.border,
+                  ),
+                ],
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.book_outlined,
+                  const BauhausSquare(
+                    color: BauhausColors.primaryYellow,
                     size: 16,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 12),
                   Text(
                     widget.book.readingProgress > 0
                         ? l10n.progressPercent(progressPercent)
                         : l10n.notStarted,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    style: GoogleFonts.outfit(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.0,
+                      color: BauhausColors.foreground,
                     ),
                   ),
                 ],
@@ -152,46 +183,32 @@ class _BookDetailViewBodyState extends ConsumerState<BookDetailViewBody> {
 
             const SizedBox(height: 16),
 
-            // Metadata chips
+            // Metadata chips - Bauhaus style
             Wrap(
               spacing: 12,
               runSpacing: 12,
               alignment: WrapAlignment.start,
               children: [
-                _MetadataChip(label: l10n.chaptersCount(widget.book.totalChapters)),
-                _MetadataChip(label: l10n.epubVersion(widget.book.epubVersion)),
-                _MetadataChip(label: directionToString(widget.book.direction)),
+                _BauhausMetadataChip(label: l10n.chaptersCount(widget.book.totalChapters)),
+                _BauhausMetadataChip(label: l10n.epubVersion(widget.book.epubVersion)),
+                _BauhausMetadataChip(label: directionToString(widget.book.direction)),
               ],
             ),
 
             const SizedBox(height: 40),
 
-            // Read / Continue reading button
+            // Read / Continue reading button - Bauhaus style
             SizedBox(
               width: double.infinity,
-              child: FilledButton.tonal(
+              child: BauhausButton(
+                label: widget.book.readingProgress > 0
+                    ? l10n.continueReading
+                    : l10n.startReading,
                 onPressed: navigateToReader,
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 16,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  textStyle: const TextStyle(fontWeight: FontWeight.w500),
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                ),
-                child: Text(
-                  widget.book.readingProgress > 0
-                      ? l10n.continueReading
-                      : l10n.startReading,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
+                variant: BauhausButtonVariant.primary,
+                icon: widget.book.readingProgress > 0
+                    ? Icons.play_arrow_outlined
+                    : Icons.menu_book_outlined,
               ),
             ),
 
@@ -199,21 +216,13 @@ class _BookDetailViewBodyState extends ConsumerState<BookDetailViewBody> {
             const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
-              child: OutlinedButton.icon(
+              child: BauhausButton(
+                label: l10n.exportAnnotations,
                 onPressed: () {
                   _showExportDialog(context, widget.book);
                 },
-                icon: const Icon(Icons.download_outlined, size: 18),
-                label: Text(l10n.exportAnnotations),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 14,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                ),
+                variant: BauhausButtonVariant.outline,
+                icon: Icons.download_outlined,
               ),
             ),
 
@@ -263,35 +272,73 @@ class _BookDetailViewBodyState extends ConsumerState<BookDetailViewBody> {
     final l10n = AppLocalizations.of(context)!;
     showModalBottomSheet(
       context: context,
-      builder: (dialogContext) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.description_outlined),
-              title: Text(l10n.exportAsTxt),
-              onTap: () {
-                Navigator.pop(dialogContext);
-                _exportAnnotations(context, book, 'txt');
-              },
+      builder: (dialogContext) => Container(
+        decoration: const BoxDecoration(
+          color: BauhausColors.background,
+          border: Border(
+            top: BorderSide(
+              color: BauhausColors.border,
+              width: 4,
             ),
-            ListTile(
-              leading: const Icon(Icons.article_outlined),
-              title: Text(l10n.exportAsMd),
-              onTap: () {
-                Navigator.pop(dialogContext);
-                _exportAnnotations(context, book, 'md');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.data_object_outlined),
-              title: Text(l10n.exportAsJson),
-              onTap: () {
-                Navigator.pop(dialogContext);
-                _exportAnnotations(context, book, 'json');
-              },
-            ),
-          ],
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const BauhausSquare(
+                  color: BauhausColors.primaryRed,
+                  size: 20,
+                ),
+                title: Text(
+                  l10n.exportAsTxt.toUpperCase(),
+                  style: GoogleFonts.outfit(
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(dialogContext);
+                  _exportAnnotations(context, book, 'txt');
+                },
+              ),
+              ListTile(
+                leading: const BauhausSquare(
+                  color: BauhausColors.primaryBlue,
+                  size: 20,
+                ),
+                title: Text(
+                  l10n.exportAsMd.toUpperCase(),
+                  style: GoogleFonts.outfit(
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(dialogContext);
+                  _exportAnnotations(context, book, 'md');
+                },
+              ),
+              ListTile(
+                leading: const BauhausSquare(
+                  color: BauhausColors.primaryYellow,
+                  size: 20,
+                ),
+                title: Text(
+                  l10n.exportAsJson.toUpperCase(),
+                  style: GoogleFonts.outfit(
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(dialogContext);
+                  _exportAnnotations(context, book, 'json');
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -343,9 +390,9 @@ class _BookDetailViewBodyState extends ConsumerState<BookDetailViewBody> {
   String _generateMarkdownExport(ShelfBook book) {
     return '''# Annotations from "${book.title}"
 
-**Authors:** ${book.authors.join(', ')}
-**Exported:** ${DateTime.now().toString().split('.').first}
-**Reading Progress:** ${(book.readingProgress * 100).toStringAsFixed(1)}%
+|**Authors:** ${book.authors.join(', ')}
+|**Exported:** ${DateTime.now().toString().split('.').first}
+|**Reading Progress:** ${(book.readingProgress * 100).toStringAsFixed(1)}%
 
 ---
 
@@ -354,7 +401,7 @@ class _BookDetailViewBodyState extends ConsumerState<BookDetailViewBody> {
 (No annotations yet)
 
 ---
-|---\n*Exported from Lectra Reader*\n''';
+*Exported from Lectra Reader*
 ''';
   }
 
@@ -375,27 +422,30 @@ Exported from Lectra Reader
   }
 }
 
-/// Small outlined chip used to display a single piece of book metadata.
-class _MetadataChip extends StatelessWidget {
+/// Bauhaus-style metadata chip
+class _BauhausMetadataChip extends StatelessWidget {
   final String label;
 
-  const _MetadataChip({required this.label});
+  const _BauhausMetadataChip({required this.label});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
+        color: Colors.white,
         border: Border.all(
-          color: Theme.of(context).colorScheme.outline,
-          width: 1,
+          color: BauhausColors.border,
+          width: 2,
         ),
-        borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
-        label,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        label.toUpperCase(),
+        style: GoogleFonts.outfit(
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 1.0,
+          color: BauhausColors.foreground,
         ),
       ),
     );

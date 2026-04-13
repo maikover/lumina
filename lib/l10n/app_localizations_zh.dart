@@ -781,4 +781,94 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get chapterNotFoundInSpine => '未找到该章节';
+
+  @override
+  String get readerLineHeight => '行高';
+
+  @override
+  String get readerParagraphSpacing => '段落间距';
+
+  @override
+  String get searchInBook => '在书中搜索';
+
+  @override
+  String get searchHint => '输入搜索文本...';
+
+  @override
+  String get searchNoResults => '未找到结果';
+
+  @override
+  String searchResultsCount(int count) {
+    return '找到 $count 条结果';
+  }
+
+  @override
+  String get searchPrevious => '上一个';
+
+  @override
+  String get searchNext => '下一个';
+
+  @override
+  String get exportAnnotations => '导出标注';
+
+  @override
+  String get exportAnnotationsTitle => '导出笔记为';
+
+  @override
+  String get exportAsTxt => '导出为 TXT';
+
+  @override
+  String get exportAsMd => '导出为 Markdown';
+
+  @override
+  String get exportAsJson => '导出为 JSON';
+
+  @override
+  String get exportSuccess => '标注导出成功';
+
+  @override
+  String get exportError => '导出标注失败';
+
+  @override
+  String get brightnessControl => '亮度';
+
+  @override
+  String get librarySearchHint => '搜索书籍...';
+
+  @override
+  String get tapZonesConfig => '点击区域';
+
+  @override
+  String get tapZoneLeft => '左侧区域';
+
+  @override
+  String get tapZoneCenter => '中间区域';
+
+  @override
+  String get tapZoneRight => '右侧区域';
+
+  @override
+  String get tapZoneActionNextPage => '下一页';
+
+  @override
+  String get tapZoneActionPrevPage => '上一页';
+
+  @override
+  String get tapZoneActionShowUi => '显示/隐藏界面';
+
+  @override
+  String get tapZoneActionOpenMenu => '打开菜单';
+
+  @override
+  String get progressBar => '进度';
+
+  @override
+  String chapterProgress(int current, int total) {
+    return '第 $current 章，共 $total 章';
+  }
+
+  @override
+  String estimatedTimeRemaining(String time) {
+    return '剩余 $time';
+  }
 }

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lumina/src/core/theme/app_theme.dart';
+import 'package:lumina/src/core/theme/color_schemes.dart';
+import 'package:lumina/src/core/widgets/bauhaus_components.dart';
 import '../application/bookshelf_notifier.dart';
 import '../domain/shelf_book.dart';
 import 'mixins/library_actions_mixin.dart';
@@ -12,7 +15,7 @@ import 'widgets/library_selection_bar.dart';
 import 'widgets/style_bottom_sheet.dart';
 import '../../../../l10n/app_localizations.dart';
 
-/// Library Screen - Displays user's book collection with advanced bookshelf features
+/// Library Screen - Displays user's book collection with Bauhaus design
 class LibraryScreen extends ConsumerStatefulWidget {
   const LibraryScreen({super.key});
 
@@ -108,7 +111,6 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
     final secondaryAnimation =
         route?.secondaryAnimation ?? const AlwaysStoppedAnimation(0.0);
 
-    // AbsorbPointer to prevent interactions during transition
     return AnimatedBuilder(
       animation: secondaryAnimation,
       builder: (context, child) {
@@ -141,16 +143,54 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
       child: Stack(
         children: [
           Scaffold(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            backgroundColor: BauhausColors.background,
             body: bookshelfState.when(
-              loading: () => const Center(
-                child: CircularProgressIndicator(strokeWidth: 2),
+              loading: () => Center(
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: BauhausColors.border,
+                      width: 4,
+                    ),
+                    boxShadow: const [
+                      BoxShadow(
+                        offset: Offset(6, 6),
+                        blurRadius: 0,
+                        color: BauhausColors.border,
+                      ),
+                    ],
+                  ),
+                  child: const CircularProgressIndicator(
+                    strokeWidth: 3,
+                    color: BauhausColors.primaryRed,
+                  ),
+                ),
               ),
               error: (error, stack) => Center(
-                child: Text(
-                  AppLocalizations.of(
-                    context,
-                  )!.errorLoadingLibrary(error.toString()),
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const BauhausSquare(
+                        color: BauhausColors.primaryRed,
+                        size: 48,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        AppLocalizations.of(
+                          context,
+                        )!.errorLoadingLibrary(error.toString()),
+                        style: GoogleFonts.outfit(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               data: (state) {
@@ -164,13 +204,28 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
           if (isSelectingFiles)
             Positioned.fill(
               child: Container(
-                color: Theme.of(
-                  context,
-                ).colorScheme.scrim.withValues(alpha: 0.5),
-                child: const Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white,
+                color: BauhausColors.foreground.withValues(alpha: 0.5),
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: BauhausColors.border,
+                        width: 4,
+                      ),
+                      boxShadow: const [
+                        BoxShadow(
+                          offset: Offset(8, 8),
+                          blurRadius: 0,
+                          color: BauhausColors.border,
+                        ),
+                      ],
+                    ),
+                    child: const CircularProgressIndicator(
+                      strokeWidth: 3,
+                      color: BauhausColors.primaryRed,
+                    ),
                   ),
                 ),
               ),
@@ -191,27 +246,31 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
       IconData icon,
       String label,
       VoidCallback onTap,
+      Color accentColor,
     ) {
       return SpeedDialChild(
-        child: Icon(icon),
-        label: label,
-        onTap: onTap,
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-        labelBackgroundColor: Theme.of(context).colorScheme.surface,
-        labelShadow: [],
-        labelStyle: TextStyle(
-          color: Theme.of(context).colorScheme.onSurface,
-          fontWeight: FontWeight.w500,
+        child: BauhausCircle(
+          color: accentColor,
+          size: 24,
         ),
-        elevation: 2,
+        label: label.toUpperCase(),
+        onTap: onTap,
+        labelStyle: GoogleFonts.outfit(
+          color: BauhausColors.foreground,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 1.0,
+          fontSize: 12,
+        ),
+        labelBackgroundColor: Colors.white,
+        labelShadow: [],
+        elevation: 0,
       );
     }
 
     return SpeedDial(
-      icon: Icons.add_outlined,
-      activeIcon: Icons.close_outlined,
-      overlayColor: Theme.of(context).colorScheme.scrim,
+      icon: Icons.add,
+      activeIcon: Icons.close,
+      overlayColor: BauhausColors.foreground,
       overlayOpacity: 0.5,
       spaceBetweenChildren: 12,
       renderOverlay: true,
@@ -221,27 +280,28 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
           Icons.file_present_outlined,
           AppLocalizations.of(context)!.importFiles,
           () => _importFiles(context, ref),
+          BauhausColors.primaryRed,
         ),
         buildSpeedDialChild(
           Icons.folder_open_outlined,
           AppLocalizations.of(context)!.importFromFolder,
           () => _scanFolder(context, ref),
+          BauhausColors.primaryBlue,
         ),
         buildSpeedDialChild(
           Icons.settings_backup_restore_outlined,
           AppLocalizations.of(context)!.restoreFromBackup,
           () => handleRestoreBackup(context, ref),
+          BauhausColors.primaryYellow,
         ),
       ],
     );
   }
 
-  // Placeholder method for scanning folder
   void _scanFolder(BuildContext context, WidgetRef ref) {
     handleScanFolder(context, ref);
   }
 
-  // Placeholder method for importing files
   void _importFiles(BuildContext context, WidgetRef ref) {
     handleImportFiles(context, ref);
   }
@@ -252,7 +312,29 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
     BookshelfState state,
   ) {
     if (_tabController == null) {
-      return const Center(child: CircularProgressIndicator(strokeWidth: 2));
+      return Center(
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: BauhausColors.border,
+              width: 4,
+            ),
+            boxShadow: const [
+              BoxShadow(
+                offset: Offset(6, 6),
+                blurRadius: 0,
+                color: BauhausColors.border,
+              ),
+            ],
+          ),
+          child: const CircularProgressIndicator(
+            strokeWidth: 3,
+            color: BauhausColors.primaryRed,
+          ),
+        ),
+      );
     }
 
     final bottomStatusBarHeight = MediaQuery.of(context).padding.bottom;
@@ -287,8 +369,6 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
             children: _buildTabViewChildren(context, ref, state),
           ),
         ),
-        // Slide the selection bar up from below the screen when entering
-        // selection mode, and back down when leaving it.
         AnimatedPositioned(
           duration: const Duration(
             milliseconds: AppTheme.defaultAnimationDurationMs,
@@ -316,11 +396,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
   ) {
     final tabs = <Widget>[];
 
-    // "All" tab
     tabs.add(_buildTabContent(ref, state, null));
     tabs.add(_buildTabContent(ref, state, -1));
 
-    // Group tabs
     for (final group in state.availableGroups) {
       tabs.add(_buildTabContent(ref, state, group.id));
     }
@@ -332,12 +410,33 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
     final isActiveTab = state.filterGroupId == groupId;
     final booksForTab = isActiveTab ? state.books : state.cachedBooks[groupId];
     if (booksForTab == null) {
-      return const Center(child: CircularProgressIndicator(strokeWidth: 2));
+      return Center(
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: BauhausColors.border,
+              width: 4,
+            ),
+            boxShadow: const [
+              BoxShadow(
+                offset: Offset(6, 6),
+                blurRadius: 0,
+                color: BauhausColors.border,
+              ),
+            ],
+          ),
+          child: const CircularProgressIndicator(
+            strokeWidth: 3,
+            color: BauhausColors.primaryRed,
+          ),
+        ),
+      );
     }
 
     final bottomStatusBarHeight = MediaQuery.of(context).padding.bottom;
 
-    // Use Builder to get the correct context inside NestedScrollView
     return Builder(
       builder: (BuildContext context) {
         return CustomScrollView(
@@ -366,22 +465,33 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
   ) {
     showModalBottomSheet(
       context: context,
-      showDragHandle: true,
-      builder: (context) => SizedBox(
-        width: double.infinity,
-        child: StyleBottomSheet(
-          currentSort: state.sortBy,
-          onSortSelected: (sortBy) {
-            ref
-                .read(bookshelfNotifierProvider.notifier)
-                .changeSortOrder(sortBy);
-            Navigator.pop(context);
-          },
-          currentViewMode: state.viewMode,
-          onViewModeSelected: (mode) {
-            ref.read(bookshelfNotifierProvider.notifier).changeViewMode(mode);
-            Navigator.pop(context);
-          },
+      showDragHandle: false,
+      builder: (context) => Container(
+        decoration: const BoxDecoration(
+          color: BauhausColors.background,
+          border: Border(
+            top: BorderSide(
+              color: BauhausColors.border,
+              width: 4,
+            ),
+          ),
+        ),
+        child: SizedBox(
+          width: double.infinity,
+          child: StyleBottomSheet(
+            currentSort: state.sortBy,
+            onSortSelected: (sortBy) {
+              ref
+                  .read(bookshelfNotifierProvider.notifier)
+                  .changeSortOrder(sortBy);
+              Navigator.pop(context);
+            },
+            currentViewMode: state.viewMode,
+            onViewModeSelected: (mode) {
+              ref.read(bookshelfNotifierProvider.notifier).changeViewMode(mode);
+              Navigator.pop(context);
+            },
+          ),
         ),
       ),
       scrollControlDisabledMaxHeightRatio: 0.75,
@@ -398,11 +508,23 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
     if (books.isEmpty) {
       return SliverFillRemaining(
         child: Center(
-          child: Text(
-            AppLocalizations.of(context)!.noItemsInCategory,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const BauhausTriangle(
+                color: BauhausColors.muted,
+                size: 64,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                AppLocalizations.of(context)!.noItemsInCategory,
+                style: GoogleFonts.outfit(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: BauhausColors.foreground.withValues(alpha: 0.6),
+                ),
+              ),
+            ],
           ),
         ),
       );

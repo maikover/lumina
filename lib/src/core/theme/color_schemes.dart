@@ -1,73 +1,72 @@
 import 'package:flutter/material.dart';
 
-const ColorScheme kLightColorScheme = ColorScheme.light(
-  primary: Color(0xFF6C63FF),    // Violet - new branding
-  onPrimary: Colors.white,
-  secondary: Color(0xFF00D9FF),  // Cyan - new branding
-  onSecondary: Color(0xFF1a1a2e),
-  tertiary: Color(0xFF5A7A8C),
-  onTertiary: Colors.white,
-  error: Color(0xFFEB5757),
-  onError: Colors.white,
-  primaryContainer: Color(0xFFE3E4E6),
-  onPrimaryContainer: Color(0xFF111213),
-  secondaryContainer: Color(0xFFE8E8E6),
-  onSecondaryContainer: Color(0xFF1A1D1E),
-  tertiaryContainer: Color(0xFFDDE6EB),
-  onTertiaryContainer: Color(0xFF15242C),
-  errorContainer: Color(0xFFFDECEC),
-  onErrorContainer: Color(0xFF5C1B1B),
-  surface: Colors.white,
-  onSurface: Color(0xFF2F3437),
-  onSurfaceVariant: Color(0xFF787774),
-  surfaceContainerLowest: Color(0xFFFFFFFF),
-  surfaceContainerLow: Color(0xFFFDFDFD),
-  surfaceContainer: Color(0xFFFCFCFB),
-  surfaceContainerHigh: Color(0xFFFAFAF9),
-  surfaceContainerHighest: Color(0xFFF7F7F5),
-  outline: Color(0xFFE9E9E7),
-  outlineVariant: Color(0xFFF3F3F2),
-  inverseSurface: Color(0xFF2F3437),
-  onInverseSurface: Color(0xFFF1F1EF),
-  inversePrimary: Color(0xFFD4D4D4),
-  scrim: Colors.black,
-  shadow: Color(0xFF0F1112),
+/// Bauhaus Design System Colors
+/// Based on primary colors: Red, Blue, Yellow, Black, White
+class BauhausColors {
+  BauhausColors._();
+
+  // Core palette
+  static const Color background = Color(0xFFF0F0F0);
+  static const Color foreground = Color(0xFF121212);
+  static const Color primaryRed = Color(0xFFD02020);
+  static const Color primaryBlue = Color(0xFF1040C0);
+  static const Color primaryYellow = Color(0xFFF0C020);
+  static const Color border = Color(0xFF121212);
+  static const Color muted = Color(0xFFE0E0E0);
+  static const Color white = Color(0xFFFFFFFF);
+
+  // Derived colors
+  static const Color surface = Color(0xFFF0F0F0);
+  static const Color onSurface = Color(0xFF121212);
+  static const Color error = Color(0xFFD02020);
+  static const Color onError = Color(0xFFFFFFFF);
+}
+
+/// Bauhaus Light Color Scheme for Lectra
+const ColorScheme kBauhausLightColorScheme = ColorScheme.light(
+  primary: BauhausColors.primaryRed,
+  onPrimary: BauhausColors.white,
+  secondary: BauhausColors.primaryBlue,
+  onSecondary: BauhausColors.white,
+  tertiary: BauhausColors.primaryYellow,
+  onTertiary: BauhausColors.foreground,
+  error: BauhausColors.primaryRed,
+  onError: BauhausColors.white,
+  surface: BauhausColors.background,
+  onSurface: BauhausColors.foreground,
+  outline: BauhausColors.border,
+  outlineVariant: BauhausColors.muted,
+  inverseSurface: BauhausColors.foreground,
+  onInverseSurface: BauhausColors.white,
+  scrim: BauhausColors.foreground,
+  shadow: BauhausColors.foreground,
+  surfaceContainerHighest: BauhausColors.muted,
 );
 
+// Keep existing color schemes for backwards compatibility
+const ColorScheme kLightColorScheme = kBauhausLightColorScheme;
 const ColorScheme kDarkColorScheme = ColorScheme.dark(
-  primary: Color(0xFF9D95FF),    // Lighter violet for dark mode
-  onPrimary: Color(0xFF1a1a2e),
-  secondary: Color(0xFF00D9FF),  // Cyan
-  onSecondary: Color(0xFF1a1a2e),
-  tertiary: Color(0xFF89A3B2),
-  onTertiary: Color(0xFF0D1D26),
-  error: Color(0xFFFF7369),
-  onError: Colors.white,
-  primaryContainer: Color(0xFF3A3E41),
-  onPrimaryContainer: Color(0xFFE3E4E6),
-  secondaryContainer: Color(0xFF3C3C3C),
-  onSecondaryContainer: Color(0xFFF5F5F5),
-  tertiaryContainer: Color(0xFF2B3F4A),
-  onTertiaryContainer: Color(0xFFDDE6EB),
-  errorContainer: Color(0xFF732B26),
-  onErrorContainer: Color(0xFFFFDADB),
-  surface: Color(0xFF191919),
-  onSurface: Color(0xFFD4D4D4),
-  onSurfaceVariant: Color(0xFF9B9A97),
-  surfaceContainerLowest: Color(0xFF0A0A0A),
-  surfaceContainerLow: Color(0xFF121212),
-  surfaceContainer: Color(0xFF1E1E1E),
-  surfaceContainerHigh: Color(0xFF202020),
-  surfaceContainerHighest: Color(0xFF252525),
-  outline: Color(0xFF373737),
+  primary: BauhausColors.primaryRed,
+  onPrimary: BauhausColors.white,
+  secondary: BauhausColors.primaryBlue,
+  onSecondary: BauhausColors.white,
+  tertiary: BauhausColors.primaryYellow,
+  onTertiary: BauhausColors.foreground,
+  error: BauhausColors.primaryRed,
+  onError: BauhausColors.white,
+  surface: Color(0xFF1A1A1A),
+  onSurface: Color(0xFFF0F0F0),
+  outline: Color(0xFF3A3A3A),
   outlineVariant: Color(0xFF2A2A2A),
-  inverseSurface: Color(0xFFEBEBEA),
-  onInverseSurface: Color(0xFF191919),
-  inversePrimary: Color(0xFF6C63FF),
+  inverseSurface: BauhausColors.background,
+  onInverseSurface: BauhausColors.foreground,
   scrim: Colors.black,
   shadow: Colors.black,
+  surfaceContainerHighest: Color(0xFF2A2A2A),
 );
 
+// Eye-care, matcha, midnight, sakura, ocean, twilight, coffee schemes
+// are kept for backwards compatibility but not used in Bauhaus mode
 const ColorScheme kEyeCareColorScheme = ColorScheme.light(
   primary: Color(0xFFAD7B46),
   onPrimary: Colors.white,
@@ -498,47 +497,47 @@ const ColorScheme kCoffeeLightColorScheme = ColorScheme.light(
   onSurfaceVariant: Color(0xFF4F4539),
   surfaceContainerLowest: Color(0xFFFFFFFF),
   surfaceContainerLow: Color(0xFFF6F3EE),
-  surfaceContainer: Color(0xFFF1EDE8),
-  surfaceContainerHigh: Color(0xFFEBE7E2),
-  surfaceContainerHighest: Color(0xFFE5E2DD),
-  outline: Color(0xFF817567),
-  outlineVariant: Color(0xFFD3C4B4),
-  inverseSurface: Color(0xFF34302A),
-  onInverseSurface: Color(0xFFF9F5F0),
-  inversePrimary: Color(0xFFFFB951),
+  surfaceContainer: Color(0xFFF0EBE2),
+  surfaceContainerHigh: Color(0xFFEAE5DB),
+  surfaceContainerHighest: Color(0xFFE3DDD3),
+  outline: Color(0xFF807568),
+  outlineVariant: Color(0xFFD0C4B4),
+  inverseSurface: Color(0xFF342F2A),
+  onInverseSurface: Color(0xFFF5F0EA),
+  inversePrimary: Color(0xFFE1B890),
   scrim: Colors.black,
-  shadow: Colors.black,
+  shadow: Color(0xFF0F0B07),
 );
 
 const ColorScheme kCoffeeDarkColorScheme = ColorScheme.dark(
-  primary: Color(0xFFFFB951),
-  onPrimary: Color(0xFF452B00),
-  secondary: Color(0xFFDEC2A2),
-  onSecondary: Color(0xFF3E2D16),
-  tertiary: Color(0xFFB8CEA1),
-  onTertiary: Color(0xFF243515),
+  primary: Color(0xFFE1B890),
+  onPrimary: Color(0xFF452B09),
+  secondary: Color(0xFFD2C4B0),
+  onSecondary: Color(0xFF3B3026),
+  tertiary: Color(0xFFB8CDAA),
+  onTertiary: Color(0xFF243516),
   error: Color(0xFFFFB4AB),
   onError: Color(0xFF690005),
-  primaryContainer: Color(0xFF633F00),
+  primaryContainer: Color(0xFF634000),
   onPrimaryContainer: Color(0xFFFFDDAF),
-  secondaryContainer: Color(0xFF56442B),
+  secondaryContainer: Color(0xFF54462E),
   onSecondaryContainer: Color(0xFFFBDEBC),
-  tertiaryContainer: Color(0xFF3A4C2A),
+  tertiaryContainer: Color(0xFF394B2A),
   onTertiaryContainer: Color(0xFFD4EABB),
   errorContainer: Color(0xFF93000A),
   onErrorContainer: Color(0xFFFFDAD6),
-  surface: Color(0xFF17130E),
-  onSurface: Color(0xFFE5E2DD),
-  onSurfaceVariant: Color(0xFFD3C4B4),
-  surfaceContainerLowest: Color(0xFF110E09),
-  surfaceContainerLow: Color(0xFF1F1B16),
-  surfaceContainer: Color(0xFF231F1A),
-  surfaceContainerHigh: Color(0xFF2E2924),
-  surfaceContainerHighest: Color(0xFF39342E),
-  outline: Color(0xFF9C8F80),
-  outlineVariant: Color(0xFF4F4539),
-  inverseSurface: Color(0xFFE5E2DD),
-  onInverseSurface: Color(0xFF34302A),
+  surface: Color(0xFF17130F),
+  onSurface: Color(0xFFDFDAD0),
+  onSurfaceVariant: Color(0xFFD0C4B4),
+  surfaceContainerLowest: Color(0xFF0F0D0A),
+  surfaceContainerLow: Color(0xFF1E1A15),
+  surfaceContainer: Color(0xFF262018),
+  surfaceContainerHigh: Color(0xFF302A23),
+  surfaceContainerHighest: Color(0xFF3C352D),
+  outline: Color(0xFF9A8E7E),
+  outlineVariant: Color(0xFF514539),
+  inverseSurface: Color(0xFFDFDAD0),
+  onInverseSurface: Color(0xFF342F2A),
   inversePrimary: Color(0xFF825500),
   scrim: Colors.black,
   shadow: Colors.black,

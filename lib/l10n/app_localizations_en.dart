@@ -800,4 +800,94 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chapterNotFoundInSpine => 'Chapter not found in book spine';
+
+  @override
+  String get readerLineHeight => 'Line Height';
+
+  @override
+  String get readerParagraphSpacing => 'Paragraph Spacing';
+
+  @override
+  String get searchInBook => 'Search in Book';
+
+  @override
+  String get searchHint => 'Enter search text...';
+
+  @override
+  String get searchNoResults => 'No results found';
+
+  @override
+  String searchResultsCount(int count) {
+    return '$count results found';
+  }
+
+  @override
+  String get searchPrevious => 'Previous';
+
+  @override
+  String get searchNext => 'Next';
+
+  @override
+  String get exportAnnotations => 'Export Annotations';
+
+  @override
+  String get exportAnnotationsTitle => 'Export annotations as';
+
+  @override
+  String get exportAsTxt => 'Export as TXT';
+
+  @override
+  String get exportAsMd => 'Export as Markdown';
+
+  @override
+  String get exportAsJson => 'Export as JSON';
+
+  @override
+  String get exportSuccess => 'Annotations exported successfully';
+
+  @override
+  String get exportError => 'Failed to export annotations';
+
+  @override
+  String get brightnessControl => 'Brightness';
+
+  @override
+  String get librarySearchHint => 'Search books...';
+
+  @override
+  String get tapZonesConfig => 'Tap Zones';
+
+  @override
+  String get tapZoneLeft => 'Left Zone';
+
+  @override
+  String get tapZoneCenter => 'Center Zone';
+
+  @override
+  String get tapZoneRight => 'Right Zone';
+
+  @override
+  String get tapZoneActionNextPage => 'Next Page';
+
+  @override
+  String get tapZoneActionPrevPage => 'Previous Page';
+
+  @override
+  String get tapZoneActionShowUi => 'Show/Hide UI';
+
+  @override
+  String get tapZoneActionOpenMenu => 'Open Menu';
+
+  @override
+  String get progressBar => 'Progress';
+
+  @override
+  String chapterProgress(int current, int total) {
+    return 'Chapter $current of $total';
+  }
+
+  @override
+  String estimatedTimeRemaining(String time) {
+    return '$time remaining';
+  }
 }

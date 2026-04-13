@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lumina/src/core/theme/color_schemes.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../application/bookshelf_notifier.dart';
 import '../../domain/shelf_group.dart';
 
-/// AppBar widget for the Library screen with tabs and action buttons.
+/// AppBar widget for the Library screen with Bauhaus design styling.
+/// Features geometric accents and thick borders.
 class LibraryAppBar extends StatefulWidget {
   const LibraryAppBar({
     required this.state,
@@ -45,7 +48,6 @@ class _LibraryAppBarState extends State<LibraryAppBar>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 250),
-      // Start fully visible when not in selection mode.
       value: widget.state.isSelectionMode ? 0.0 : 1.0,
     );
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
@@ -56,9 +58,9 @@ class _LibraryAppBarState extends State<LibraryAppBar>
     super.didUpdateWidget(oldWidget);
     if (widget.state.isSelectionMode != oldWidget.state.isSelectionMode) {
       if (widget.state.isSelectionMode) {
-        _controller.reverse(); // collapse TabBar
+        _controller.reverse();
       } else {
-        _controller.forward(); // expand TabBar
+        _controller.forward();
       }
     }
   }
@@ -74,8 +76,6 @@ class _LibraryAppBarState extends State<LibraryAppBar>
     final isSelectionMode = widget.state.isSelectionMode;
     final logoSvgPath = 'assets/logos/logo.svg';
 
-    // Rebuild the SliverAppBar on every animation tick so that
-    // bottom.preferredSize.height shrinks/grows smoothly.
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
@@ -86,17 +86,12 @@ class _LibraryAppBarState extends State<LibraryAppBar>
           sliver: SliverAppBar(
             pinned: true,
             floating: false,
-            // Lerp between surface (normal) and surfaceContainer (selection).
-            // _animation.value: 1.0 = normal, 0.0 = selection mode.
-            backgroundColor: Color.lerp(
-              Theme.of(context).colorScheme.surfaceContainer,
-              Theme.of(context).colorScheme.surface,
-              _animation.value,
-            ),
+            backgroundColor: BauhausColors.background,
             leading: isSelectionMode
-                ? IconButton(
-                    icon: const Icon(Icons.close_outlined),
+                ? _BauhausIconButton(
+                    icon: Icons.close,
                     onPressed: widget.onSelectionToggle,
+                    isCircle: false,
                   )
                 : null,
             title: GestureDetector(
@@ -104,62 +99,69 @@ class _LibraryAppBarState extends State<LibraryAppBar>
               onTap: isSelectionMode ? null : () => context.push('/settings'),
               child: isSelectionMode
                   ? Text(
-                      AppLocalizations.of(
-                        context,
-                      )!.selected(widget.state.selectedCount),
+                      AppLocalizations.of(context)!.selected(widget.state.selectedCount),
+                      style: GoogleFonts.outfit(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1.0,
+                        color: BauhausColors.foreground,
+                      ),
                     )
-                  : IconButton(
-                      padding: EdgeInsets.only(
-                        left: 0,
-                        right: 32,
-                        top: 16,
-                        bottom: 16,
-                      ),
-                      alignment: Alignment.centerLeft,
-                      constraints: const BoxConstraints(
-                        minWidth: 48,
-                        minHeight: 48,
-                      ),
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      onPressed: () => context.push('/settings'),
-                      icon: SvgPicture.asset(
-                        logoSvgPath,
-                        height: 16,
-                        colorFilter: ColorFilter.mode(
-                          Theme.of(context).colorScheme.onSurface,
-                          BlendMode.srcIn,
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          logoSvgPath,
+                          height: 20,
+                          colorFilter: ColorFilter.mode(
+                            BauhausColors.foreground,
+                            BlendMode.srcIn,
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 12),
+                        // Geometric accent
+                        Container(
+                          width: 8,
+                          height: 24,
+                          color: BauhausColors.primaryRed,
+                        ),
+                        Container(
+                          width: 8,
+                          height: 24,
+                          color: BauhausColors.primaryBlue,
+                        ),
+                        Container(
+                          width: 8,
+                          height: 24,
+                          color: BauhausColors.primaryYellow,
+                        ),
+                      ],
                     ),
             ),
             actions: [
               if (isSelectionMode)
-                IconButton(
+                _BauhausIconButton(
+                  icon: widget.state.selectedCount == widget.state.books.length
+                      ? Icons.deselect_outlined
+                      : Icons.select_all_outlined,
                   onPressed: () {
-                    if (widget.state.selectedCount ==
-                        widget.state.books.length) {
+                    if (widget.state.selectedCount == widget.state.books.length) {
                       widget.onClearSelection();
                     } else {
                       widget.onSelectAll();
                     }
                   },
-                  icon: Icon(
-                    widget.state.selectedCount == widget.state.books.length
-                        ? Icons.deselect_outlined
-                        : Icons.select_all_outlined,
-                  ),
+                  isCircle: false,
                 )
               else ...[
-                IconButton(
-                  icon: const Icon(Icons.tune_outlined),
+                _BauhausIconButton(
+                  icon: Icons.tune_outlined,
                   onPressed: widget.onSortPressed,
+                  isCircle: false,
                 ),
+                const SizedBox(width: 8),
               ],
             ],
-            // Always supply a bottom widget so the SliverAppBar height
-            // transitions smoothly rather than jumping between two states.
             bottom: _AnimatedTabBarWrapper(
               height: animatedHeight,
               opacity: _animation.value,
@@ -169,8 +171,26 @@ class _LibraryAppBarState extends State<LibraryAppBar>
                 tabAlignment: TabAlignment.start,
                 tabs: _buildTabs(context),
                 indicatorSize: TabBarIndicatorSize.label,
-                dividerColor: Theme.of(context).colorScheme.primaryFixed,
+                dividerColor: BauhausColors.border,
                 labelPadding: EdgeInsets.zero,
+                indicator: const UnderlineTabIndicator(
+                  borderSide: BorderSide(
+                    color: BauhausColors.foreground,
+                    width: 4,
+                  ),
+                ),
+                labelColor: BauhausColors.foreground,
+                unselectedLabelColor: BauhausColors.foreground.withValues(alpha: 0.5),
+                labelStyle: GoogleFonts.outfit(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.5,
+                ),
+                unselectedLabelStyle: GoogleFonts.outfit(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.5,
+                ),
               ),
             ),
           ),
@@ -185,13 +205,41 @@ class _LibraryAppBarState extends State<LibraryAppBar>
     tabs.add(
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 13),
-        child: Tab(child: Text(AppLocalizations.of(context)!.all)),
+        child: Tab(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const BauhausCircle(
+                color: BauhausColors.primaryRed,
+                size: 8,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                AppLocalizations.of(context)!.all.toUpperCase(),
+              ),
+            ],
+          ),
+        ),
       ),
     );
     tabs.add(
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 13),
-        child: Tab(child: Text(AppLocalizations.of(context)!.uncategorized)),
+        child: Tab(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const BauhausSquare(
+                color: BauhausColors.primaryBlue,
+                size: 8,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                AppLocalizations.of(context)!.uncategorized.toUpperCase(),
+              ),
+            ],
+          ),
+        ),
       ),
     );
 
@@ -206,7 +254,19 @@ class _LibraryAppBarState extends State<LibraryAppBar>
           behavior: HitTestBehavior.opaque,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 13),
-            child: Tab(child: Text(group.name)),
+            child: Tab(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const BauhausTriangle(
+                    color: BauhausColors.primaryYellow,
+                    size: 8,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(group.name.toUpperCase()),
+                ],
+              ),
+            ),
           ),
         ),
       );
@@ -216,8 +276,7 @@ class _LibraryAppBarState extends State<LibraryAppBar>
   }
 }
 
-/// A [PreferredSizeWidget] wrapper that reports an animated [height] to
-/// [SliverAppBar] and fades/clips the inner [child] accordingly.
+/// Animated tab bar wrapper with Bauhaus styling
 class _AnimatedTabBarWrapper extends StatelessWidget
     implements PreferredSizeWidget {
   const _AnimatedTabBarWrapper({
@@ -240,6 +299,50 @@ class _AnimatedTabBarWrapper extends StatelessWidget
       child: Align(
         alignment: Alignment.topCenter,
         child: Opacity(opacity: opacity, child: child),
+      ),
+    );
+  }
+}
+
+/// Bauhaus-style icon button
+class _BauhausIconButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final bool isCircle;
+
+  const _BauhausIconButton({
+    required this.icon,
+    this.onPressed,
+    this.isCircle = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
+          border: Border.all(
+            color: BauhausColors.border,
+            width: 2,
+          ),
+          boxShadow: const [
+            BoxShadow(
+              offset: Offset(2, 2),
+              blurRadius: 0,
+              color: BauhausColors.border,
+            ),
+          ],
+        ),
+        child: Icon(
+          icon,
+          size: 20,
+          color: BauhausColors.foreground,
+        ),
       ),
     );
   }
