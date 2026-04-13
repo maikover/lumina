@@ -26,6 +26,11 @@ class ControlPanel extends ConsumerStatefulWidget {
   final VoidCallback onPreviousChapter;
   final VoidCallback onNextChapter;
   final Function(bool show) onToggleStyleDrawer;
+  // Search callbacks
+  final Future<void> Function(String query) onSearch;
+  final VoidCallback onSearchNext;
+  final VoidCallback onSearchPrevious;
+  final VoidCallback onSearchClose;
 
   const ControlPanel({
     super.key,
@@ -45,12 +50,86 @@ class ControlPanel extends ConsumerStatefulWidget {
     required this.onPreviousChapter,
     required this.onNextChapter,
     required this.onToggleStyleDrawer,
+    required this.onSearch,
+    required this.onSearchNext,
+    required this.onSearchPrevious,
+    required this.onSearchClose,
   });
 
   bool get isVertical => direction == 1;
 
   @override
   ConsumerState<ControlPanel> createState() => _ControlPanelState();
+}
+
+/// Internal widget that manages search dialog state and delegates to callbacks
+class _SearchDialogController extends StatefulWidget {
+  final Future<void> Function(String query) onSearch;
+  final VoidCallback onNext;
+  final VoidCallback onPrevious;
+  final VoidCallback onClose;
+
+  const _SearchDialogController({
+    required this.onSearch,
+    required this.onNext,
+    required this.onPrevious,
+    required this.onClose,
+  });
+
+  @override
+  State<_SearchDialogController> createState() => _SearchDialogControllerState();
+}
+
+class _SearchDialogControllerState extends State<_SearchDialogController> {
+  int _resultCount = 0;
+  int _currentIndex = 0;
+  String _lastQuery = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return ReaderSearchDialog(
+      onSearch: (query) async {
+        _lastQuery = query;
+        if (query.isEmpty) {
+          setState(() {
+            _resultCount = 0;
+            _currentIndex = 0;
+          });
+          await widget.onSearch('');
+          return;
+        }
+        // Perform search
+        await widget.onSearch(query);
+        // The webview handles the matches - we just show that search was performed
+        setState(() {
+          _resultCount = 1; // We can't get the actual count from findAllAsync easily
+          _currentIndex = 0;
+        });
+      },
+      onNext: () {
+        if (_resultCount > 0) {
+          setState(() {
+            _currentIndex = (_currentIndex + 1) % _resultCount;
+          });
+          widget.onNext();
+        }
+      },
+      onPrevious: () {
+        if (_resultCount > 0) {
+          setState(() {
+            _currentIndex = (_currentIndex - 1 + _resultCount) % _resultCount;
+          });
+          widget.onPrevious();
+        }
+      },
+      resultCount: _resultCount,
+      currentIndex: _currentIndex,
+      onClose: () {
+        // Clear matches when closing
+        widget.onClose();
+      },
+    );
+  }
 }
 
 class _ControlPanelState extends ConsumerState<ControlPanel> {
@@ -182,23 +261,16 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
   }
 
   void _showSearchDialog(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
-      builder: (context) => ReaderSearchDialog(
-        onSearch: (query) {
-          // Search will be handled by reader screen
-          debugPrint('Search query: $query');
+      builder: (dialogContext) => _SearchDialogController(
+        onSearch: widget.onSearch,
+        onNext: widget.onSearchNext,
+        onPrevious: widget.onSearchPrevious,
+        onClose: () {
+          widget.onSearchClose();
+          Navigator.pop(dialogContext);
         },
-        onNext: () {
-          debugPrint('Search next');
-        },
-        onPrevious: () {
-          debugPrint('Search previous');
-        },
-        resultCount: 0,
-        currentIndex: 0,
-        onClose: () => Navigator.pop(context),
       ),
     );
   }

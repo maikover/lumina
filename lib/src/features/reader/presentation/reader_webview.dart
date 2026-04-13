@@ -20,8 +20,44 @@ class ReaderWebViewController {
 
   bool get isAttached => _webViewState != null;
 
+  /// Gets the underlying InAppWebViewController for direct webview operations
+  InAppWebViewController? get controller => _webViewState?._controller;
+
   void _attachState(_ReaderWebViewState? state) {
     _webViewState = state;
+  }
+
+  // Search functionality using findAllAsync
+  Future<int> findAllAsync(String query) async {
+    final ctrl = _webViewState?._controller;
+    if (ctrl == null) return 0;
+    try {
+      await ctrl.findAllAsync(query: query);
+      return 1; // Return 1 to indicate success, count is handled by webview
+    } catch (e) {
+      debugPrint('findAllAsync error: $e');
+      return 0;
+    }
+  }
+
+  Future<void> findNext(bool forward) async {
+    final ctrl = _webViewState?._controller;
+    if (ctrl == null) return;
+    try {
+      await ctrl.findNext(forward: forward);
+    } catch (e) {
+      debugPrint('findNext error: $e');
+    }
+  }
+
+  Future<void> clearMatches() async {
+    final ctrl = _webViewState?._controller;
+    if (ctrl == null) return;
+    try {
+      await ctrl.clearMatches();
+    } catch (e) {
+      debugPrint('clearMatches error: $e');
+    }
   }
 
   // JavaScript wrapper methods

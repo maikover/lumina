@@ -443,6 +443,18 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                         tocDrawerOpen = show;
                         setupVolumeControl();
                       },
+                      onSearch: (query) async {
+                        await rendererController.findAllAsync(query);
+                      },
+                      onSearchNext: () {
+                        rendererController.findNext(true);
+                      },
+                      onSearchPrevious: () {
+                        rendererController.findNext(false);
+                      },
+                      onSearchClose: () {
+                        rendererController.clearMatches();
+                      },
                     ),
                   ],
                 ),

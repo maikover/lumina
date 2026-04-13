@@ -142,6 +142,19 @@ class ReaderRendererController {
   Future<void> waitForEvent(int token) async {
     await webViewController?.waitForEvent(token);
   }
+
+  // Search functionality
+  Future<int> findAllAsync(String query) async {
+    return await webViewController?.findAllAsync(query) ?? 0;
+  }
+
+  Future<void> findNext(bool forward) async {
+    await webViewController?.findNext(forward);
+  }
+
+  Future<void> clearMatches() async {
+    await webViewController?.clearMatches();
+  }
 }
 
 class ReaderRenderer extends ConsumerStatefulWidget {
