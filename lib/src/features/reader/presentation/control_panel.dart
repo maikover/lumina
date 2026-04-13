@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lumina/src/core/theme/app_theme.dart';
 import 'package:lumina/src/features/reader/application/reader_settings_notifier.dart';
+import 'package:lumina/src/features/reader/presentation/widgets/reader_search_dialog.dart';
 import 'widgets/reader_style_bottom_sheet.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ControlPanel extends ConsumerStatefulWidget {
   final bool showControls;
@@ -179,6 +181,28 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
     return '$currentStr/$totalStr';
   }
 
+  void _showSearchDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) => ReaderSearchDialog(
+        onSearch: (query) {
+          // Search will be handled by reader screen
+          debugPrint('Search query: $query');
+        },
+        onNext: () {
+          debugPrint('Search next');
+        },
+        onPrevious: () {
+          debugPrint('Search previous');
+        },
+        resultCount: 0,
+        currentIndex: 0,
+        onClose: () => Navigator.pop(context),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final settings = ref.watch(readerSettingsNotifierProvider);
@@ -226,6 +250,16 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
+                  actions: [
+                    IconButton(
+                      icon: const Icon(Icons.search_outlined),
+                      onPressed: () {
+                        // Show search dialog - handled by parent via callback
+                        _showSearchDialog(context);
+                      },
+                      tooltip: AppLocalizations.of(context)?.searchInBook ?? 'Search in Book',
+                    ),
+                  ],
                 ),
               ),
             ),
