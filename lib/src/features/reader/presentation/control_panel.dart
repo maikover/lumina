@@ -31,6 +31,10 @@ class ControlPanel extends ConsumerStatefulWidget {
   final VoidCallback onSearchNext;
   final VoidCallback onSearchPrevious;
   final VoidCallback onSearchClose;
+  // TTS callbacks
+  final VoidCallback? onStartTts;
+  final VoidCallback? onStopTts;
+  final VoidCallback? onShowTtsControls;
 
   const ControlPanel({
     super.key,
@@ -54,6 +58,9 @@ class ControlPanel extends ConsumerStatefulWidget {
     required this.onSearchNext,
     required this.onSearchPrevious,
     required this.onSearchClose,
+    this.onStartTts,
+    this.onStopTts,
+    this.onShowTtsControls,
   });
 
   bool get isVertical => direction == 1;
@@ -330,6 +337,11 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
                         _showSearchDialog(context);
                       },
                       tooltip: AppLocalizations.of(context)?.searchInBook ?? 'Search in Book',
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.volume_up_outlined),
+                      onPressed: widget.onShowTtsControls,
+                      tooltip: 'Text to Speech',
                     ),
                   ],
                 ),

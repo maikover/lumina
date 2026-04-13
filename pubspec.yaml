@@ -70,6 +70,9 @@ dependencies:
   # File Sharing (iOS Share Sheet)
   share_plus: ^12.0.1
 
+  # Text-to-Speech
+  flutter_tts: ^4.2.0
+
   # Rust FFI bridge
   flutter_rust_bridge: 2.11.1
   lumina_rust:
