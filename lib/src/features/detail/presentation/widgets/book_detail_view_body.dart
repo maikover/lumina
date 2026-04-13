@@ -36,9 +36,25 @@ class _BookDetailViewBodyState extends ConsumerState<BookDetailViewBody> {
     final progressPercent = (widget.book.readingProgress * 100).toStringAsFixed(2);
 
     void navigateToReader() {
-      context.push('/read/${widget.book.fileHash}').then((_) {
-        ref.invalidate(bookDetailProvider(widget.bookId));
-      });
+      final filePath = widget.book.filePath;
+      final isPdf = filePath != null &&
+          (filePath.toLowerCase().endsWith('.pdf') ||
+           filePath.toLowerCase().endsWith('.pdfrx'));
+
+      if (isPdf) {
+        // Open PDF reader
+        final encodedTitle = Uri.encodeComponent(widget.book.title);
+        context.push(
+          '/read/${Uri.encodeComponent(filePath!)}?pdf=true&title=$encodedTitle',
+        ).then((_) {
+          ref.invalidate(bookDetailProvider(widget.bookId));
+        });
+      } else {
+        // Open EPUB reader
+        context.push('/read/${widget.book.fileHash}').then((_) {
+          ref.invalidate(bookDetailProvider(widget.bookId));
+        });
+      }
     }
 
     return SingleChildScrollView(
