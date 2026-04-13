@@ -73,6 +73,9 @@ dependencies:
   # Text-to-Speech
   flutter_tts: ^4.2.0
 
+  # HTTP client for dictionary API
+  http: ^1.2.2
+
   # Rust FFI bridge
   flutter_rust_bridge: 2.11.1
   lumina_rust:

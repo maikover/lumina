@@ -19,6 +19,7 @@ import '../data/book_session.dart';
 import './reader_renderer.dart';
 import './control_panel.dart';
 import 'tts_overlay.dart';
+import 'dictionary_overlay.dart';
 import '../data/services/epub_stream_service_provider.dart';
 import '../../library/data/repositories/shelf_book_repository_provider.dart';
 import '../../library/data/repositories/book_manifest_repository_provider.dart';
@@ -35,6 +36,7 @@ part 'mixins/image_viewer_mixin.dart';
 part 'mixins/footnote_mixin.dart';
 part 'mixins/text_selection_mixin.dart';
 part 'mixins/tts_mixin.dart';
+part 'mixins/dictionary_mixin.dart';
 
 /// Reads EPUB directly from compressed file without extraction
 class ReaderScreen extends ConsumerStatefulWidget {
@@ -57,7 +59,8 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
         _ImageViewerMixin,
         _FootnoteMixin,
         _TextSelectionMixin,
-        _TtsMixin {
+        _TtsMixin,
+        _DictionaryMixin {
   @override
   late final EpubWebViewHandler webViewHandler;
 
@@ -512,6 +515,26 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                       ? TtsOverlay(
                           onClose: hideTtsOverlay,
                           currentText: ttsCurrentText,
+                        )
+                      : const SizedBox.shrink(),
+                ),
+              ),
+            ),
+
+            // Dictionary Overlay
+            Positioned.fill(
+              child: IgnorePointer(
+                ignoring: !isDictionaryOverlayVisible,
+                child: AnimatedOpacity(
+                  duration: const Duration(
+                    milliseconds: AppTheme.defaultAnimationDurationMs,
+                  ),
+                  curve: Curves.easeOut,
+                  opacity: isDictionaryOverlayVisible ? 1.0 : 0.0,
+                  child: isDictionaryOverlayVisible && dictionaryCurrentWord != null
+                      ? DictionaryOverlay(
+                          word: dictionaryCurrentWord!,
+                          onClose: hideDictionaryOverlay,
                         )
                       : const SizedBox.shrink(),
                 ),
