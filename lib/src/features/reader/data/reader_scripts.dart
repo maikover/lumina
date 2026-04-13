@@ -51,6 +51,8 @@ String generateSkeletonHtml(
 
       'fontFileName': theme.fontFileName,
       'overrideFontFamily': theme.overrideFontFamily,
+      'lineHeight': theme.lineHeight,
+      'paragraphSpacing': theme.paragraphSpacing,
     },
     'paginationCss': kPaginationCss,
   });

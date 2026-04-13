@@ -305,6 +305,47 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
+                            // Draggable progress slider
+                            SizedBox(
+                              width: 100,
+                              height: 20,
+                              child: SliderTheme(
+                                data: SliderThemeData(
+                                  trackHeight: 4,
+                                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
+                                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 12),
+                                  activeTrackColor: themeData.colorScheme.primary,
+                                  inactiveTrackColor: themeData.colorScheme.surfaceContainerHighest,
+                                  thumbColor: themeData.colorScheme.primary,
+                                  overlayColor: themeData.colorScheme.primary.withAlpha(30),
+                                ),
+                                child: Slider(
+                                  value: widget.totalSpineItems > 1
+                                      ? widget.currentSpineItemIndex.toDouble()
+                                      : 0,
+                                  min: 0,
+                                  max: (widget.totalSpineItems - 1).toDouble().clamp(0, double.infinity),
+                                  divisions: widget.totalSpineItems > 1 ? (widget.totalSpineItems - 1).clamp(1, 100) : 1,
+                                  onChanged: (value) {
+                                    // Navigate to selected chapter
+                                    final targetIndex = value.round();
+                                    if (targetIndex < widget.currentSpineItemIndex) {
+                                      // Go to previous chapters to reach target
+                                      for (int i = widget.currentSpineItemIndex - 1; i >= targetIndex; i--) {
+                                        if (i < widget.currentSpineItemIndex) {
+                                          widget.onPreviousPage();
+                                        }
+                                      }
+                                    } else if (targetIndex > widget.currentSpineItemIndex) {
+                                      // Go to next chapters to reach target
+                                      for (int i = widget.currentSpineItemIndex; i < targetIndex; i++) {
+                                        widget.onNextPage();
+                                      }
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
                             Stack(
                               alignment: Alignment.center,
                               children: [
